@@ -47,7 +47,7 @@
         <div>
             <input name="consent" type="checkbox" id="consent" value="True">
             <label for="consent">I understand my rights and agree to participate in the experiment.</label>
-            <div class="text-danger">{{ form.consent.errors }}</div>
+            <div class="text-danger">{{ formfield_errors 'consent'}}</div>
         </div>
 
     </div>
