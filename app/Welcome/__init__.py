@@ -2,7 +2,13 @@
 from otree.api import *
 c = cu
 
-doc = ''
+author = 'Denise Feigl'
+
+doc = """
+Welcome App. 
+Introduces the researcher and the experiment to the participants.
+As for consent and move further to following app only if consent is given.
+"""
 class C(BaseConstants):
     NAME_IN_URL = 'Welcome'
     PLAYERS_PER_GROUP = None
@@ -12,14 +18,11 @@ class Subsession(BaseSubsession):
 class Group(BaseGroup):
     pass
 class Player(BasePlayer):
-    consent = models.IntegerField(choices=[[1, 'Ja'], [0, 'Nein']], label='Ich kenne meine Rechte und bin mit der Teilnahme an dieser Studie einverstanden.', widget=widgets.RadioSelectHorizontal)
-def consent_error_message(player: Player, value):
-    if value == 0:
-        return 'Bitte bestätigen Sie, dass Sie Ihre Rechte kennen und mit der Teilnahme an dieser Studie einverstanden sind'
-class Welcome(Page):
+    consent = models.BooleanField()
+class Consent(Page):
     form_model = 'player'
     form_fields = ['consent']
-class Info(Page):
+class Welcome(Page):
     form_model = 'player'
 class Next(Page):
     form_model = 'player'
