@@ -20,9 +20,14 @@ SESSION_CONFIGS = [
 
 SESSION_CONFIG_DEFAULTS = dict(real_world_currency_per_point=1, participation_fee=0)
 
-LANGUAGE_CODE = 'de'
-REAL_WORLD_CURRENCY_CODE = 'EUR'
+# ISO-639 code
+# for example: de, fr, ja, ko, zh-hans
+LANGUAGE_CODE = 'en'
+
+# e.g. EUR, GBP, CNY, JPY
+REAL_WORLD_CURRENCY_CODE = 'USD'
 USE_POINTS = True
+
 DEMO_PAGE_INTRO_HTML = ''
 PARTICIPANT_FIELDS = ['is_dropout']
 SESSION_FIELDS = ['params']
