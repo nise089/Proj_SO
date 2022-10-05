@@ -5,12 +5,12 @@ c = cu
 author = 'Denise Feigl'
 
 doc = """
-Welcome App. 
+app_Welcome App. 
 Introduces the researcher and the experiment to the participants.
 As for consent and move further to following app only if consent is given.
 """
 class C(BaseConstants):
-    NAME_IN_URL = 'Welcome'
+    NAME_IN_URL = 'app_Welcome'
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 1
 class Subsession(BaseSubsession):
@@ -26,4 +26,5 @@ class Welcome(Page):
     form_model = 'player'
 class Next(Page):
     form_model = 'player'
-page_sequence = [Welcome, Info, Next]
+
+page_sequence = [Consent, Welcome, Next]
