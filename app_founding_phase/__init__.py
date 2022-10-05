@@ -7,7 +7,7 @@ Your app description
 
 
 class C(BaseConstants):
-    NAME_IN_URL = 'founding_phase'
+    NAME_IN_URL = 'app_founding_phase'
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 1
 
