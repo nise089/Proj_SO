@@ -1,0 +1,26 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}Bitte beantworten Sie die folgenden Fragen{{ endblock }}
+
+{{ block content }}
+
+{{ formfield 'age' }}
+{{ formfield 'gender' }}
+{{ formfield 'job' }}
+<br>
+<p>
+<b> 
+Wie gut beschreibt jede der nachfolgenden Aussagen Sie als Person?
+<br>
+[Skala: 0-beschreibt mich überhaupt nicht bis 10-beschreibt mich perfekt]
+</b>
+</p>
+{{ formfield 'pos_reciprocity' }}
+{{ formfield 'neg_reciprocity' }}
+<br>
+{{ formfield 'trust_general' }}
+
+
+
+{{ next_button }}
+
+{{ endblock }}

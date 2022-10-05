@@ -1,0 +1,78 @@
+{{ extends 'global/Page.html' }}
+{{ block title }}Bitte beantworten Sie die folgenden Fragen{{ endblock }}
+
+{{ block content }}
+
+<p>Sagen Sie uns bitte, ob Sie sich in einer der folgenden Organisationen engagieren: </p>
+<div class="form-check">
+  <input class="form-check-input" type="checkbox" value="True" name="member_political">
+  <label class="form-check-label">
+    Parteien oder politische Gruppen
+  </label>
+</div>
+<div class="form-check">
+  <input class="form-check-input" type="checkbox" value="True" name="member_ecological">
+  <label class="form-check-label">
+    Ökologie- und Umweltgruppen oder Tierschutzvereine/-gruppen
+  </label>
+</div>
+<div class="form-check">
+  <input class="form-check-input" type="checkbox" value="True" name="member_welfare">
+  <label class="form-check-label">
+    Humanitäre / Wohlfahrtsorganisationen
+  </label>
+</div>
+<div class="form-check">
+  <input class="form-check-input" type="checkbox" value="True" name="member_sports">
+  <label class="form-check-label">
+    Sport- und Freizeitvereine
+  </label>
+</div>
+<div class="form-check">
+  <input class="form-check-input" type="checkbox" value="True" name="member_other">
+  <label class="form-check-label">
+    Andere Organisationen oder Gruppen
+  </label>
+</div>
+<br>
+<p>Welche Quellen nutzen Sie, um zu erfahren, was um Sie herum und in der Welt passiert? </p>
+<div class="form-check">
+  <input class="form-check-input" type="checkbox" value="True" name="info_newspaper">
+  <label class="form-check-label">
+Tageszeitung 
+    </label>
+</div>
+<div class="form-check">
+  <input class="form-check-input" type="checkbox" value="True" name="info_tv">
+  <label class="form-check-label">
+    Nachrichtensendungen im Fernsehen
+  </label>
+</div>
+<div class="form-check">
+  <input class="form-check-input" type="checkbox" value="True" name="info_radio">
+  <label class="form-check-label">
+    Nachrichtensendungen im Radio
+  </label>
+</div>
+<div class="form-check">
+  <input class="form-check-input" type="checkbox" value="True" name="info_web">
+  <label class="form-check-label">
+    Nachrichtenseiten im Internet
+  </label>
+</div>
+<div class="form-check">
+  <input class="form-check-input" type="checkbox" value="True" name="info_socialmedia">
+  <label class="form-check-label">
+    Social Media (Facebook, Twitter, etc.) 
+  </label>
+</div>
+<div class="form-check">
+  <input class="form-check-input" type="checkbox" value="True" name="info_people">
+  <label class="form-check-label">
+    Gespräche mit Freunden, Kollegen und Bekannten 
+  </label>
+</div>
+{{ next_button }}
+
+
+{{ endblock }}
