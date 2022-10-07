@@ -42,4 +42,25 @@ SECRET_KEY = 'blahblah'
 # if an app is included in SESSION_CONFIGS, you don't need to list it here
 INSTALLED_APPS = ['otree']
 
+# adjustments for testing
+# generating session configs for all varieties of features
 
+import sys
+
+if sys.argv[1] == 'test':
+    MAX_ITERATIONS = 5
+    FREEZE_TIME = 100
+    TRIAL_PAUSE = 200
+    TRIAL_TIMEOUT = 300
+
+    SESSION_CONFIGS = [
+        dict(
+            name=f"testing_sliders",
+            num_demo_participants=1,
+            app_sequence=['sliders'],
+            trial_delay=TRIAL_PAUSE / 1000.0,
+            retry_delay=FREEZE_TIME / 1000.0,
+            num_sliders=3,
+            attempts_per_slider=3,
+        )
+    ]
