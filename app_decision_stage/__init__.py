@@ -50,6 +50,7 @@ class ProfitChoice(Page):
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
+        # applies only for investors for now
         if player.profit_choice == 'owner bonus':
             player.payoff = player.profit + settings.SESSION_CONFIG_DEFAULTS['dividend']
         else:
@@ -63,6 +64,7 @@ class SellingChoice(Page):
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
+        # applies only for owners of MARKET companies for now
         # draw random offered price
         player.offered_price = random.randint(0, 100)
         # check if offered price >= accepted price
