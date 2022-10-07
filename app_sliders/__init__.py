@@ -16,12 +16,8 @@ Slider task based on Github repository see code and documentation here: https://
 
 class Constants(BaseConstants):
     name_in_url = "sliders"
-    players_per_group = None
-    num_rounds = 2  # TODO set number from calibration
-    # GlobalConstant = global_models.GlobalC  # access constants of the game
-
-    # wage = 5  # TODO set number from calibration
-    # piecerate = 1  # TODO set number from calibration
+    players_per_group = 3
+    num_rounds = 1  # TODO set number from calibration
 
     instructions_template = __name__ + "/instructions.html"
 
@@ -45,6 +41,11 @@ def creating_session(subsession: Subsession):
 
 
 class Group(BaseGroup):
+    tot_effort = models.IntegerField()
+    profit = models.FloatField()
+
+
+
     pass
 
 
@@ -267,8 +268,22 @@ class Game(Page):
             player.payoff = settings.SESSION_CONFIG_DEFAULTS['wage'] + puzzle.num_correct * settings.SESSION_CONFIG_DEFAULTS['piecerate']
 
 
+class ResultsWaitPage(WaitPage):
+
+    def set_profit(group: Group):
+        players = group.get_players()
+        effort = [p.num_correct for p in players]
+        group.tot_effort = sum(effort)
+        revenue = settings.SESSION_CONFIG_DEFAULTS['prod_piecerate'] * group.tot_effort
+        group.profit = revenue + settings.SESSION_CONFIG_DEFAULTS['Rfixed'] \
+                      - settings.SESSION_CONFIG_DEFAULTS['n'] * settings.SESSION_CONFIG_DEFAULTS['wage']
+
+    after_all_players_arrive = set_profit
+    pass
+
+
 class Results(Page):
     pass
 
 
-page_sequence = [Game, Results]
+page_sequence = [Game, ResultsWaitPage, Results]

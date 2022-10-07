@@ -8,7 +8,7 @@ SESSION_CONFIGS = [
     dict(
         name="sliders",
         display_name="RET Slider task",
-        num_demo_participants=1,
+        num_demo_participants=3,
         app_sequence=["app_sliders"],
     )
 ]
@@ -22,7 +22,12 @@ SESSION_CONFIG_DEFAULTS = dict(
     real_world_currency_per_point=1,
     participation_fee=0,
     wage=5,  # TODO set number from calibration
-    piecerate=1  # TODO set number from calibration
+    piecerate=1,  # TODO set number from calibration
+    productivity=2,  # TODO set number from calibration
+    prod_piecerate=1,  # TODO find way to dynamically change == productivity - piecerate
+    E=10,  # TODO set number from calibration
+    Rfixed=10,  # TODO set number from calibration
+    n=3,
 )
 
 # ISO-639 code
