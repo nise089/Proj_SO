@@ -6,8 +6,8 @@ from otree.api import *
 
 from .image_utils import encode_image
 from . import task_sliders
+import random
 
-# import global_models
 
 doc = """
 Slider task based on Github repository see code and documentation here: https://github.com/qwiglydee/otree-experiments
@@ -50,11 +50,34 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
+
+    ## Worker
     # only suported 1 iteration for now
     iteration = models.IntegerField(initial=0)
 
     num_correct = models.IntegerField(initial=0)
     elapsed_time = models.FloatField(initial=0)
+
+    ## Investor
+    profit = models.IntegerField(initial=130)  # TODO later profits from slider task
+
+    profit_choice = models.StringField(
+        widget=widgets.RadioSelect,
+        label='Please choose how the profit should be used.',
+        choices=['owner bonus', 'worker bonus', 'donation']
+    )
+
+    accepted_price = models.IntegerField(
+        min=0,
+        max=100,  # TODO adjust accr. calibration
+        label='Your price offer:'
+    )
+
+    offered_price = models.IntegerField(min=0, max=100)
+
+    sold = models.BooleanField(initial=False)
+    pass
+
 
 
 # puzzle-specific stuff
@@ -292,4 +315,41 @@ class ResultsWork(Page):
     pass
 
 
-page_sequence = [Game, ResultsWaitPage, ResultsWork]
+class ProfitChoice(Page):
+    form_model = 'player'
+    form_fields = ['profit_choice']
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        # applies only for investors for now
+        if player.profit_choice == 'owner bonus':
+            player.payoff = player.profit + settings.SESSION_CONFIG_DEFAULTS['dividend']
+        else:
+            player.payoff = settings.SESSION_CONFIG_DEFAULTS['dividend']
+    pass
+
+
+class SellingChoice(Page):
+    form_model = 'player'
+    form_fields = ['accepted_price']
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        # applies only for owners of MARKET companies for now
+        # draw random offered price
+        player.offered_price = random.randint(0, 100)
+        # check if offered price >= accepted price
+        # if true, switch sold to true
+        if player.offered_price >= player.accepted_price:
+            player.sold = True
+            player.payoff += player.offered_price
+        else:
+            player.sold = False
+    pass
+
+
+class ResultsChoice(Page):
+    pass
+
+
+page_sequence = [Game, ResultsWaitPage, ResultsWork, ProfitChoice, SellingChoice, ResultsChoice]
