@@ -7,6 +7,8 @@ from otree.api import *
 from .image_utils import encode_image
 from . import task_sliders
 
+# import global_models
+
 doc = """
 Slider task based on Github repository see code and documentation here: https://github.com/qwiglydee/otree-experiments
 """
@@ -15,7 +17,11 @@ Slider task based on Github repository see code and documentation here: https://
 class Constants(BaseConstants):
     name_in_url = "sliders"
     players_per_group = None
-    num_rounds = 2
+    num_rounds = 2  # TODO set number from calibration
+    # GlobalConstant = global_models.GlobalC  # access constants of the game
+
+    # wage = 5  # TODO set number from calibration
+    # piecerate = 1  # TODO set number from calibration
 
     instructions_template = __name__ + "/instructions.html"
 
@@ -258,7 +264,7 @@ class Game(Page):
         if puzzle and puzzle.response_timestamp:
             player.elapsed_time = puzzle.response_timestamp - puzzle.timestamp
             player.num_correct = puzzle.num_correct
-            player.payoff = player.num_correct
+            player.payoff = settings.SESSION_CONFIG_DEFAULTS['wage'] + puzzle.num_correct * settings.SESSION_CONFIG_DEFAULTS['piecerate']
 
 
 class Results(Page):

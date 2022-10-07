@@ -18,7 +18,12 @@ SESSION_CONFIGS = [
 # the session config can be accessed from methods in your apps as self.session.config,
 # e.g. self.session.config['participation_fee']
 
-SESSION_CONFIG_DEFAULTS = dict(real_world_currency_per_point=1, participation_fee=0)
+SESSION_CONFIG_DEFAULTS = dict(
+    real_world_currency_per_point=1,
+    participation_fee=0,
+    wage=5,  # TODO set number from calibration
+    piecerate=1  # TODO set number from calibration
+)
 
 # ISO-639 code
 # for example: de, fr, ja, ko, zh-hans
