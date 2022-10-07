@@ -10,8 +10,14 @@ SESSION_CONFIGS = [
     dict(
         name="profit",
         display_name="Profit choice",
-        num_demo_participants=3,
+        num_demo_participants=1,
         app_sequence=["app_decision_stage"],
+    ),
+    dict(
+        name="founding",
+        display_name="Founding choice",
+        num_demo_participants=1,
+        app_sequence=["app_founding_phase"],
     )
 ]
 

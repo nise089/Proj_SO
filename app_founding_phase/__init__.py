@@ -7,7 +7,7 @@ Your app description
 
 
 class C(BaseConstants):
-    NAME_IN_URL = 'app_founding_phase'
+    NAME_IN_URL = 'founding_phase'
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 1
 
@@ -21,20 +21,26 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
+    founding = models.BooleanField(
+        widget=widgets.RadioSelectHorizontal,
+        label='Do you want found the company?')
     pass
 
 
 # PAGES
-class MyPage(Page):
+class FoundingChoice(Page):
+    form_model = 'player'
+    form_fields = ['founding']
     pass
 
 
-class ResultsWaitPage(WaitPage):
+class ResultsEnd(Page):
+
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.founding == False
+
     pass
 
 
-class Results(Page):
-    pass
-
-
-page_sequence = [MyPage, ResultsWaitPage, Results]
+page_sequence = [FoundingChoice, ResultsEnd]
