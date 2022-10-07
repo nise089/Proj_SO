@@ -9,7 +9,7 @@ Your app description
 class C(BaseConstants):
     NAME_IN_URL = 'working_stage'
     PLAYERS_PER_GROUP = None
-    NUM_ROUNDS = 1
+    NUM_ROUNDS = 3
 
 
 class Subsession(BaseSubsession):
@@ -17,10 +17,13 @@ class Subsession(BaseSubsession):
 
 
 class Group(BaseGroup):
+    performance_tot = models.IntegerField(initial=0)
+    profit = models.IntegerField(initial=0)
     pass
 
 
 class Player(BasePlayer):
+    performance = models.IntegerField(initial=0)
     pass
 
 

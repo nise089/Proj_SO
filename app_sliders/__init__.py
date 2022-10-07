@@ -15,7 +15,7 @@ Slider task based on Github repository see code and documentation here: https://
 class Constants(BaseConstants):
     name_in_url = "sliders"
     players_per_group = None
-    num_rounds = 1
+    num_rounds = 2
 
     instructions_template = __name__ + "/instructions.html"
 
