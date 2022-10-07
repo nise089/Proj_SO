@@ -1,15 +1,17 @@
 from os import environ
 
 SESSION_CONFIGS = [
-    dict(name='Test_Klima',
-        num_demo_participants=4,
-        app_sequence=['app_Welcome']
-         ),
     dict(
         name="sliders",
         display_name="RET Slider task",
         num_demo_participants=3,
         app_sequence=["app_sliders"],
+    ),
+    dict(
+        name="profit",
+        display_name="Profit choice",
+        num_demo_participants=3,
+        app_sequence=["app_decision_stage"],
     )
 ]
 
@@ -28,6 +30,7 @@ SESSION_CONFIG_DEFAULTS = dict(
     E=10,  # TODO set number from calibration
     Rfixed=10,  # TODO set number from calibration
     n=3,
+    dividend=4,  # TODO set number from calibration
 )
 
 # ISO-639 code

@@ -1,0 +1,11 @@
+{{ block title }}
+    Selling Choice
+{{ endblock }}
+{{ block content }}
+Your payoff so far is {{ player.payoff }}.
+
+Please choose your price P of the range 0 to [pricerange] for which you are willing to sell the company.
+    {{ formfields }}
+    {{ next_button }}
+
+{{ endblock }}
