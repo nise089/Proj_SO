@@ -18,6 +18,12 @@ SESSION_CONFIGS = [
         display_name="Founding choice",
         num_demo_participants=1,
         app_sequence=["app_founding_phase"],
+    ),
+    dict(
+        name="production",
+        display_name="Production",
+        num_demo_participants=3,
+        app_sequence=["app_production_phase"],
     )
 ]
 
