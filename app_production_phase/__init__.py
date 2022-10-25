@@ -306,7 +306,8 @@ class WorkWaitPage(WaitPage):
         group.tot_effort = sum(effort)
         revenue = settings.SESSION_CONFIG_DEFAULTS['prod_piecerate'] * group.tot_effort
         group.profit = revenue + settings.SESSION_CONFIG_DEFAULTS['Rfixed'] \
-                       - settings.SESSION_CONFIG_DEFAULTS['n'] * settings.SESSION_CONFIG_DEFAULTS['wage']
+                       - settings.SESSION_CONFIG_DEFAULTS['n'] * settings.SESSION_CONFIG_DEFAULTS['wage'] \
+                       - settings.SESSION_CONFIG_DEFAULTS['dividend']
 
     after_all_players_arrive = set_profit
     pass
@@ -358,6 +359,7 @@ def company_sold(group: Group):
 class ChoiceWaitPage(WaitPage):
     # use own template
     template_name = 'app_production_phase/ChoiceWaitPage.html'
+
     @staticmethod
     def set_payoffs(group: Group):
         company_sold(group)
@@ -368,14 +370,17 @@ class ChoiceWaitPage(WaitPage):
                     p.payoff = group.profit + settings.SESSION_CONFIG_DEFAULTS['dividend']
                     if group.sold:
                         p.payoff += group.price_offer
+                        print('owner payoff:', p.payoff)
                 else:
                     p.payoff = settings.SESSION_CONFIG_DEFAULTS['dividend']
+                    print('worker payoff:', p.payoff)
                     if group.sold:
                         p.payoff += group.price_offer
+                        print('worker payoff:', p.payoff)
             # worker payoff
             else:
                 if group.profit_choice == 'worker bonus':
-                    p.payoff += 1 / 3 * group.profit
+                    p.payoff += group.profit /3
 
     after_all_players_arrive = set_payoffs
 
