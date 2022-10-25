@@ -22,7 +22,7 @@ SESSION_CONFIGS = [
     dict(
         name="production",
         display_name="Production",
-        num_demo_participants=3,
+        num_demo_participants=4,
         app_sequence=["app_production_phase"],
     )
 ]

@@ -8,7 +8,6 @@ from .image_utils import encode_image
 from . import task_sliders
 import random
 
-
 doc = """
 Slider task based on Github repository see code and documentation here: https://github.com/qwiglydee/otree-experiments
 """
@@ -16,8 +15,8 @@ Slider task based on Github repository see code and documentation here: https://
 
 class Constants(BaseConstants):
     name_in_url = "production"
-    players_per_group = 3
-    num_rounds = 3  # TODO set number from calibration
+    players_per_group = 4
+    num_rounds = 1  # TODO set number from calibration
 
     instructions_template = __name__ + "/instructions.html"
 
@@ -43,23 +42,9 @@ def creating_session(subsession: Subsession):
 class Group(BaseGroup):
     tot_effort = models.IntegerField()
     profit = models.FloatField()
-
-
-
-    pass
-
-
-class Player(BasePlayer):
-
-    ## Worker
-    # only suported 1 iteration for now
-    iteration = models.IntegerField(initial=0)
-
-    num_correct = models.IntegerField(initial=0)
-    elapsed_time = models.FloatField(initial=0)
-
-    ## Investor
-    profit = models.IntegerField(initial=130)  # TODO later profits from slider task
+    price_offer = models.IntegerField(min=0, max=100)
+    sold = models.BooleanField(initial=False)
+    donation = models.IntegerField(initial=0)
 
     profit_choice = models.StringField(
         widget=widgets.RadioSelect,
@@ -73,11 +58,18 @@ class Player(BasePlayer):
         label='Your price offer:'
     )
 
-    offered_price = models.IntegerField(min=0, max=100)
-
-    sold = models.BooleanField(initial=False)
     pass
 
+
+class Player(BasePlayer):
+    ## Worker
+    # only suported 1 iteration for now
+    iteration = models.IntegerField(initial=0)
+
+    num_correct = models.IntegerField(initial=0)
+    elapsed_time = models.FloatField(initial=0)
+    sold = models.StringField(initial='not sold')
+    pass
 
 
 # puzzle-specific stuff
@@ -262,10 +254,15 @@ def play_game(player: Player, message: dict):
     raise RuntimeError("unrecognized message from client")
 
 
+# Pages
 class Game(Page):
     timeout_seconds = 120
 
     live_method = play_game
+
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.id_in_group != 1
 
     @staticmethod
     def js_vars(player: Player):
@@ -292,59 +289,93 @@ class Game(Page):
                 player.payoff = settings.SESSION_CONFIG_DEFAULTS['wage'] + puzzle.num_correct * \
                                 settings.SESSION_CONFIG_DEFAULTS['piecerate']
             else:
-                prev_player = player.in_round(player.round_number-1)
+                prev_player = player.in_round(player.round_number - 1)
                 prev_payoff = prev_player.payoff
-                player.payoff = prev_payoff + settings.SESSION_CONFIG_DEFAULTS['wage'] + puzzle.num_correct * settings.SESSION_CONFIG_DEFAULTS['piecerate']
+                player.payoff = prev_payoff + settings.SESSION_CONFIG_DEFAULTS['wage'] + puzzle.num_correct * \
+                                settings.SESSION_CONFIG_DEFAULTS['piecerate']
 
 
 class ResultsWaitPage(WaitPage):
 
+    @staticmethod
     def set_profit(group: Group):
         players = group.get_players()
         effort = [p.num_correct for p in players]
         group.tot_effort = sum(effort)
         revenue = settings.SESSION_CONFIG_DEFAULTS['prod_piecerate'] * group.tot_effort
         group.profit = revenue + settings.SESSION_CONFIG_DEFAULTS['Rfixed'] \
-                      - settings.SESSION_CONFIG_DEFAULTS['n'] * settings.SESSION_CONFIG_DEFAULTS['wage']
+                       - settings.SESSION_CONFIG_DEFAULTS['n'] * settings.SESSION_CONFIG_DEFAULTS['wage']
 
     after_all_players_arrive = set_profit
     pass
 
 
 class ResultsWork(Page):
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.id_in_group != 1
+
     pass
 
 
 class ProfitChoice(Page):
-    form_model = 'player'
+    form_model = 'group'
     form_fields = ['profit_choice']
 
     @staticmethod
-    def before_next_page(player: Player, timeout_happened):
-        # applies only for investors for now
-        if player.profit_choice == 'owner bonus':
-            player.payoff = player.profit + settings.SESSION_CONFIG_DEFAULTS['dividend']
-        else:
-            player.payoff = settings.SESSION_CONFIG_DEFAULTS['dividend']
+    def is_displayed(player: Player):
+        return player.id_in_group == 1
+
     pass
 
 
 class SellingChoice(Page):
-    form_model = 'player'
+    form_model = 'group'
     form_fields = ['accepted_price']
 
     @staticmethod
-    def before_next_page(player: Player, timeout_happened):
-        # applies only for owners of MARKET companies for now
-        # draw random offered price
-        player.offered_price = random.randint(0, 100)
-        # check if offered price >= accepted price
-        # if true, switch sold to true
-        if player.offered_price >= player.accepted_price:
-            player.sold = True
-            player.payoff += player.offered_price
-        else:
-            player.sold = False
+    def is_displayed(player: Player):
+        return player.id_in_group == 1
+
+    pass
+
+
+def company_sold(group: Group):
+    # draw a random price offer from normal distribution 0 - 100
+    group.price_offer = random.randint(0, 100)
+    print('Z is ', group.price_offer)
+    # check if offered price >= accepted price
+    # if true, switch sold to true
+    if group.price_offer >= group.accepted_price:
+        group.sold = True
+        print('company is sold is ', group.sold)
+    else:
+        print('company is sold is ', group.sold)
+
+
+class ChoiceWaitPage(WaitPage):
+
+    @staticmethod
+    def set_payoffs(group: Group):
+        company_sold(group)
+        for p in group.get_players():
+            # investor payoff
+            if p == 1:
+                if group.profit_choice == 'owner bonus':
+                    p.payoff = group.profit + settings.SESSION_CONFIG_DEFAULTS['dividend']
+                    if group.sold:
+                        p.payoff += group.price_offer
+                else:
+                    p.payoff = settings.SESSION_CONFIG_DEFAULTS['dividend']
+                    if group.sold:
+                        p.payoff += group.price_offer
+            # worker payoff
+            else:
+                if group.profit_choice == 'worker bonus':
+                    p.payoff += 1 / 3 * group.profit
+
+    after_all_players_arrive = set_payoffs
+
     pass
 
 
@@ -352,4 +383,4 @@ class ResultsChoice(Page):
     pass
 
 
-page_sequence = [Game, ResultsWaitPage, ResultsWork, ProfitChoice, SellingChoice, ResultsChoice]
+page_sequence = [Game, ResultsWaitPage, ResultsWork, ProfitChoice, SellingChoice, ChoiceWaitPage, ResultsChoice]
