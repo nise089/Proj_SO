@@ -285,14 +285,15 @@ class Game(Page):
         if puzzle and puzzle.response_timestamp:
             player.elapsed_time = puzzle.response_timestamp - puzzle.timestamp
             player.num_correct = puzzle.num_correct
-            if player.round_number == 1:
-                player.payoff = settings.SESSION_CONFIG_DEFAULTS['wage'] + puzzle.num_correct * \
-                                settings.SESSION_CONFIG_DEFAULTS['piecerate']
-            else:
-                prev_player = player.in_round(player.round_number - 1)
-                prev_payoff = prev_player.payoff
-                player.payoff = prev_payoff + settings.SESSION_CONFIG_DEFAULTS['wage'] + puzzle.num_correct * \
-                                settings.SESSION_CONFIG_DEFAULTS['piecerate']
+            # sum up all payoffs across rounds
+            # if player.round_number == 1:
+            #     player.payoff = settings.SESSION_CONFIG_DEFAULTS['wage'] + puzzle.num_correct * \
+            #                     settings.SESSION_CONFIG_DEFAULTS['piecerate']
+            # else:
+            #     prev_player = player.in_round(player.round_number - 1)
+            #     prev_payoff = prev_player.payoff
+            #     player.payoff = prev_payoff + settings.SESSION_CONFIG_DEFAULTS['wage'] + puzzle.num_correct * \
+            #                     settings.SESSION_CONFIG_DEFAULTS['piecerate']
 
 
 class WorkWaitPage(WaitPage):
@@ -362,25 +363,25 @@ class ChoiceWaitPage(WaitPage):
 
     @staticmethod
     def set_payoffs(group: Group):
+        # computer price offer and selling consequence
         company_sold(group)
+        # payoffs
         for p in group.get_players():
             # investor payoff
-            if p == 1:
+            if p.id_in_group == 1:
+                p.payoff = settings.SESSION_CONFIG_DEFAULTS['dividend']
                 if group.profit_choice == 'owner bonus':
-                    p.payoff = group.profit + settings.SESSION_CONFIG_DEFAULTS['dividend']
+                    p.payoff += group.profit
                     if group.sold:
                         p.payoff += group.price_offer
-                        print('owner payoff:', p.payoff)
-                else:
-                    p.payoff = settings.SESSION_CONFIG_DEFAULTS['dividend']
-                    print('worker payoff:', p.payoff)
-                    if group.sold:
-                        p.payoff += group.price_offer
-                        print('worker payoff:', p.payoff)
+                elif group.profit_choice != 'owner bonus' and group.sold:
+                    p.payoff += group.price_offer
             # worker payoff
             else:
+                p.payoff = settings.SESSION_CONFIG_DEFAULTS['wage'] \
+                        + p.num_correct * settings.SESSION_CONFIG_DEFAULTS['piecerate']
                 if group.profit_choice == 'worker bonus':
-                    p.payoff += group.profit /3
+                    p.payoff += group.profit / 3
 
     after_all_players_arrive = set_payoffs
 
