@@ -295,7 +295,9 @@ class Game(Page):
                                 settings.SESSION_CONFIG_DEFAULTS['piecerate']
 
 
-class ResultsWaitPage(WaitPage):
+class WorkWaitPage(WaitPage):
+    # use own template
+    template_name = 'app_production_phase/WorkWaitPage.html'
 
     @staticmethod
     def set_profit(group: Group):
@@ -310,12 +312,12 @@ class ResultsWaitPage(WaitPage):
     pass
 
 
-class ResultsWork(Page):
-    @staticmethod
-    def is_displayed(player: Player):
-        return player.id_in_group != 1
-
-    pass
+# class ResultsWork(Page):
+#     @staticmethod
+#     def is_displayed(player: Player):
+#         return player.id_in_group != 1
+#
+#     pass
 
 
 class ProfitChoice(Page):
@@ -354,7 +356,8 @@ def company_sold(group: Group):
 
 
 class ChoiceWaitPage(WaitPage):
-
+    # use own template
+    template_name = 'app_production_phase/ChoiceWaitPage.html'
     @staticmethod
     def set_payoffs(group: Group):
         company_sold(group)
@@ -383,4 +386,4 @@ class ResultsChoice(Page):
     pass
 
 
-page_sequence = [Game, ResultsWaitPage, ResultsWork, ProfitChoice, SellingChoice, ChoiceWaitPage, ResultsChoice]
+page_sequence = [Game, WorkWaitPage, ProfitChoice, SellingChoice, ChoiceWaitPage, ResultsChoice]
