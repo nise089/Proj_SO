@@ -28,8 +28,8 @@ SESSION_CONFIGS = [
     dict(
         name="dropout",
         display_name="Dropout",
-        num_demo_participants=4,
-        app_sequence=["app_dropout"],
+        num_demo_participants=3,
+        app_sequence=["app_dropout", "app_sliders", "app_founding_phase"],
     )
 ]
 

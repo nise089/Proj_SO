@@ -1,6 +1,5 @@
 from otree.api import *
 
-
 doc = """
 Dropout detection for multiplayer game (end the game) 
 """
@@ -21,29 +20,40 @@ class Group(BaseGroup):
 
 
 class Player(BasePlayer):
-    is_dropout = models.BooleanField()
+    is_dropout = models.BooleanField(initial=False)
 
 
 class Game(Page):
     timeout_seconds = 10
 
-
-class DropoutTest(Page):
-    timeout_seconds = 10
-
     @staticmethod
+    # check if timeout happened
     def before_next_page(player: Player, timeout_happened):
         group = player.group
         if timeout_happened:
-            group.has_dropout = True
-            player.is_dropout = True
+            group.has_dropout = True  # indicate that dropout happened in group
+            player.is_dropout = True  # indicate that player dropped out
 
 
-class WaitForOthers(WaitPage):
+class Game2(Page):
+
+    @staticmethod
+    def is_displayed(player: Player):
+        group = player.group
+        return group.has_dropout == False
+
     pass
 
 
-class DropoutHappend(Page):
+class WaitForOthers(WaitPage):
+    @staticmethod
+    def is_displayed(player: Player):
+        group = player.group
+        return group.has_dropout == False
+    pass
+
+
+class DropoutHappened(Page):
     @staticmethod
     def is_displayed(player: Player):
         group = player.group
@@ -51,7 +61,11 @@ class DropoutHappend(Page):
 
     @staticmethod
     def app_after_this_page(player: Player, upcoming_apps):
-        return upcoming_apps[0]
+        group = player.group
+        if group.has_dropout:
+            return upcoming_apps[-1]
+
+    pass
 
 
-page_sequence = [Game, DropoutTest, WaitForOthers, DropoutHappend]
+page_sequence = [Game, Game2, WaitForOthers, DropoutHappened]
