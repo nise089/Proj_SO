@@ -1,0 +1,15 @@
+{{ block title }}
+    Page title
+{{ endblock }}
+
+{{ block content }}
+The profit choice is {{ group.profit_choice }}.
+The accepted price was {{ group.accepted_price }} and the computer offered {{ group.price_offer }}.
+
+The company is sold is {{ group.sold }}.
+Your payoff is {{ player.payoff }}.
+
+    {{ next_button }}
+{{ endblock }}
+
+

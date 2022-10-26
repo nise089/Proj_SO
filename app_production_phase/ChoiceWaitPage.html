@@ -1,0 +1,24 @@
+{{ extends 'otree/WaitPage.html' }}
+
+{{ block title }}
+Please wait
+{{ endblock }}
+
+{{ block content }}
+
+<p>
+    You have correctly moved {{ player.num_correct }} sliders in {{ player.elapsed_time|to2 }} seconds.
+</p>
+
+<p>
+    Your effort is {{ player.num_correct }}.
+    Your group effort is {{ group.tot_effort }}.
+    The profit is {{ group.profit}}.
+</p>
+<p>
+    Please wait until the owner has made his/her decisions.
+</p>
+
+
+{{ endblock }}
+
