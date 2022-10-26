@@ -24,6 +24,12 @@ SESSION_CONFIGS = [
         display_name="Production",
         num_demo_participants=4,
         app_sequence=["app_production_phase"],
+    ),
+    dict(
+        name="dropout",
+        display_name="Dropout",
+        num_demo_participants=4,
+        app_sequence=["app_dropout"],
     )
 ]
 
