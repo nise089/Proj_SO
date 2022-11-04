@@ -330,10 +330,21 @@ class ProfitChoice(Page):
     def is_displayed(player: Player):
         return player.id_in_group == 1
 
+    timeout_seconds = 120  # set timeout for page
+    @staticmethod
+    # check if page was submitted timeout occured
+    def before_next_page(player, timeout_happened):
+        if timeout_happened:
+            player.xyz = True
+
+
+
     pass
 
 
 class SellingChoice(Page):
+    timeout_seconds = 120
+
     form_model = 'group'
     form_fields = ['accepted_price']
 
