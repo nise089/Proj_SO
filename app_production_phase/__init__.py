@@ -4,12 +4,18 @@ import json
 from otree import settings
 from otree.api import *
 
+from _static.TimePage import TimePage
 from .image_utils import encode_image
 from . import task_sliders
 import random
 
+
+
 doc = """
+Production Phase with
 Slider task based on Github repository see code and documentation here: https://github.com/qwiglydee/otree-experiments
+Profit choice and Selling choice
+includes timeouts and dropout pages
 """
 
 
@@ -252,24 +258,6 @@ def play_game(player: Player, message: dict):
 
 
 # Pages
-class TimePage(Page):
-    # specific page class on which timeouts need to be checked; inherits all features of the Page class
-
-    @staticmethod
-    def is_displayed(player: Player):
-        # show page only for players the group variable "has_dropout" is False == no dropout in group
-        group = player.group
-        return group.has_dropout is False
-
-    @staticmethod
-    def before_next_page(player: Player, timeout_happened):
-        group = player.group
-        # check if timeout happened
-        if timeout_happened:
-            group.has_dropout = True  # indicate that dropout happened in group
-            player.is_dropout = True  # indicate that player dropped out
-
-
 class WorkingStage(TimePage):
     timeout_seconds = 20
 
