@@ -16,7 +16,7 @@ Slider task based on Github repository see code and documentation here: https://
 class Constants(BaseConstants):
     name_in_url = "production"
     players_per_group = 4
-    num_rounds = 1  # TODO set number from calibration
+    num_rounds = 3  # TODO set number from calibration
 
     instructions_template = __name__ + "/instructions.html"
 
@@ -270,6 +270,15 @@ class TimePage(Page):
             player.is_dropout = True  # indicate that player dropped out
 
 
+class WorkingStage(TimePage):
+    timeout_seconds = 20
+
+    @staticmethod
+    def is_displayed(player: Player):
+        parent_condition = TimePage.is_displayed(player)
+        return parent_condition and player.id_in_group != 1
+
+
 class Game(Page):
     timeout_seconds = 120
 
@@ -301,15 +310,6 @@ class Game(Page):
         if puzzle and puzzle.response_timestamp:
             player.elapsed_time = puzzle.response_timestamp - puzzle.timestamp
             player.num_correct = puzzle.num_correct
-            # sum up all payoffs across rounds
-            # if player.round_number == 1:
-            #     player.payoff = settings.SESSION_CONFIG_DEFAULTS['wage'] + puzzle.num_correct * \
-            #                     settings.SESSION_CONFIG_DEFAULTS['piecerate']
-            # else:
-            #     prev_player = player.in_round(player.round_number - 1)
-            #     prev_payoff = prev_player.payoff
-            #     player.payoff = prev_payoff + settings.SESSION_CONFIG_DEFAULTS['wage'] + puzzle.num_correct * \
-            #                     settings.SESSION_CONFIG_DEFAULTS['piecerate']
 
 
 class WorkWaitPage(WaitPage):
@@ -327,15 +327,6 @@ class WorkWaitPage(WaitPage):
                        - settings.SESSION_CONFIG_DEFAULTS['dividend']
 
     after_all_players_arrive = set_profit
-    pass
-
-
-# class ResultsWork(Page):
-#     @staticmethod
-#     def is_displayed(player: Player):
-#         return player.id_in_group != 1
-#
-#     pass
 
 
 class ProfitChoice(TimePage):
@@ -366,11 +357,12 @@ def company_sold(group: Group):
     # draw a random price offer from normal distribution 0 - 100
     group.price_offer = random.randint(0, 100)
     print('Z is ', group.price_offer)
-    if group.accepted_price is None:  # check is selling decision was made
+    price = group.field_maybe_none('accepted_price')
+    if price is None:  # check is selling decision was made
         return
     # check if offered price >= accepted price
     # if true, switch sold to true
-    elif group.price_offer >= group.accepted_price:
+    elif group.price_offer >= price:
         group.sold = True
         print('company is sold is ', group.sold)
     else:
@@ -381,12 +373,23 @@ class ChoiceWaitPage(WaitPage):
     # use own template
     template_name = 'app_production_phase/ChoiceWaitPage.html'
 
+    # for later sum up all payoffs across rounds
+    # if player.round_number == 1:
+    #     player.payoff = settings.SESSION_CONFIG_DEFAULTS['wage'] + puzzle.num_correct * \
+    #                     settings.SESSION_CONFIG_DEFAULTS['piecerate']
+    # else:
+    #     prev_player = player.in_round(player.round_number - 1)
+    #     prev_payoff = prev_player.payoff
+    #     player.payoff = prev_payoff + settings.SESSION_CONFIG_DEFAULTS['wage'] + puzzle.num_correct * \
+    #                     settings.SESSION_CONFIG_DEFAULTS['piecerate']
+
     @staticmethod
     def set_payoffs(group: Group):
         # computer price offer and selling consequence
         company_sold(group)
+        profit_choice = group.field_maybe_none('profit_choice')
         # payoffs
-        if group.profit_choice is None:  # check if profit choice was made
+        if profit_choice is None:  # check if profit choice was made
             # if not, also no selling choice must have been made
             for p in group.get_players():
                 # investor payoff
@@ -401,22 +404,20 @@ class ChoiceWaitPage(WaitPage):
                 # investor payoff
                 if p.id_in_group == 1:
                     p.payoff = settings.SESSION_CONFIG_DEFAULTS['dividend']
-                    if group.profit_choice == 'owner bonus':
+                    if profit_choice == 'owner bonus':
                         p.payoff += group.profit
                         if group.sold:
                             p.payoff += group.price_offer
-                    elif group.profit_choice != 'owner bonus' and group.sold:
+                    elif profit_choice != 'owner bonus' and group.sold:
                         p.payoff += group.price_offer
                 # worker payoff
                 else:
                     p.payoff = settings.SESSION_CONFIG_DEFAULTS['wage'] \
                             + p.num_correct * settings.SESSION_CONFIG_DEFAULTS['piecerate']
-                    if group.profit_choice == 'worker bonus':
+                    if profit_choice == 'worker bonus':
                         p.payoff += group.profit / 3
 
     after_all_players_arrive = set_payoffs
-
-    pass
 
 
 class ResultsChoice(TimePage):
@@ -436,5 +437,5 @@ class DropoutVictim(Page):
         return group.has_dropout and player.is_dropout is False
 
 
-page_sequence = [Game, WorkWaitPage, ProfitChoice, SellingChoice, ChoiceWaitPage,
+page_sequence = [WorkingStage, Game, WorkWaitPage, ProfitChoice, SellingChoice, ChoiceWaitPage,
                  ResultsChoice, Dropout, DropoutVictim]
