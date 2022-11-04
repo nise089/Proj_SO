@@ -420,17 +420,8 @@ class ResultsChoice(TimePage):
 
 
 class Dropout(Page):
-    @staticmethod
-    def is_displayed(player: Player):
-        return player.is_dropout
-
-
-class DropoutVictim(Page):
-    @staticmethod
-    def is_displayed(player: Player):
-        group = player.group
-        return group.has_dropout and player.is_dropout is False
+    pass
 
 
 page_sequence = [WorkingStage, Game, WorkWaitPage, ProfitChoice, SellingChoice, ChoiceWaitPage,
-                 ResultsChoice, Dropout, DropoutVictim]
+                 ResultsChoice, Dropout]

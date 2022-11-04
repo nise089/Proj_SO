@@ -1,9 +1,16 @@
 {{ block content }}
 <p>
-    Unfortunately, you failed to interact in the time allotted.
+    if is dropout: Unfortunately, you failed to interact in the time allotted.
     You, therefore, dropped out of the study and will not be paid.
     This is incredibly frustrating for us.
     We have had to compensate the other members of your group for their time,
     and we have no experimental data to show for it.
+
+<!-- TODO show different text for victim
+    Unfortunately, a member of your group failed to interact in the time allotted and is, therefore,
+    considered to have dropped out of the study.
+    Your payoff is {{ player.payoff}}
+   -->
+
 </p>
 {{ endblock }}
