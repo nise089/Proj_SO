@@ -33,7 +33,7 @@ class GamePage(Page):
         return group.has_dropout is False
 
     @staticmethod
-    def before_next_page(player:Player, timeout_happened):
+    def before_next_page(player: Player, timeout_happened):
         group = player.group
         # check if timeout happened
         if timeout_happened:
@@ -46,8 +46,10 @@ class Game(GamePage):
 
 
 class Game2(GamePage):
-
-    pass
+    @staticmethod
+    def is_displayed(player: Player):
+        parent_condition = GamePage.is_displayed(player)
+        return parent_condition and player.id_in_group != 1
 
 
 class WaitForOthers(WaitPage):
@@ -55,7 +57,6 @@ class WaitForOthers(WaitPage):
     def is_displayed(player: Player):
         group = player.group
         return group.has_dropout is False
-    pass
 
 
 class Dropout(Page):
@@ -63,16 +64,12 @@ class Dropout(Page):
     def is_displayed(player: Player):
         return player.is_dropout
 
-    pass
-
 
 class DropoutVictim(Page):
     @staticmethod
     def is_displayed(player: Player):
         group = player.group
         return group.has_dropout and player.is_dropout is False
-
-    pass
 
 
 page_sequence = [Game, Game2, WaitForOthers, Dropout, DropoutVictim]
