@@ -41,7 +41,7 @@ def creating_session(subsession: Subsession):
 
 class Group(BaseGroup):
     tot_effort = models.IntegerField()
-    profit = models.FloatField()
+    profit = models.IntegerField()
     price_offer = models.IntegerField(min=0, max=100)
     sold = models.BooleanField(initial=False)
     donation = models.IntegerField(initial=0)
@@ -339,6 +339,13 @@ class ProfitChoice(TimePage):
     def is_displayed(player: Player):
         parent_condition = TimePage.is_displayed(player)
         return parent_condition and player.id_in_group == 1
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        TimePage.before_next_page(player, timeout_happened)
+        group = player.group
+        if group.profit_choice == 'donation':
+            group.donation = group.profit
 
 
 class SellingChoice(TimePage):
