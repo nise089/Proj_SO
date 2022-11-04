@@ -58,23 +58,20 @@ class Group(BaseGroup):
         label='Your price offer:'
     )
 
-    pass
+    has_dropout = models.BooleanField(initial=False)
 
 
 class Player(BasePlayer):
-    ## Worker
-    # only suported 1 iteration for now
     iteration = models.IntegerField(initial=0)
 
     num_correct = models.IntegerField(initial=0)
     elapsed_time = models.FloatField(initial=0)
     sold = models.StringField(initial='not sold')
-    pass
+
+    is_dropout = models.BooleanField(initial=False)
 
 
 # puzzle-specific stuff
-
-
 class Puzzle(ExtraModel):
     """A model to keep record of sliders setup"""
 
@@ -255,6 +252,24 @@ def play_game(player: Player, message: dict):
 
 
 # Pages
+class TimePage(Page):
+    # specific page class on which timeouts need to be checked; inherits all features of the Page class
+
+    @staticmethod
+    def is_displayed(player: Player):
+        # show page only for players the group variable "has_dropout" is False == no dropout in group
+        group = player.group
+        return group.has_dropout is False
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        group = player.group
+        # check if timeout happened
+        if timeout_happened:
+            group.has_dropout = True  # indicate that dropout happened in group
+            player.is_dropout = True  # indicate that player dropped out
+
+
 class Game(Page):
     timeout_seconds = 120
 
@@ -262,7 +277,8 @@ class Game(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.id_in_group != 1
+        parent_condition = TimePage.is_displayed(player)
+        return parent_condition and player.id_in_group != 1
 
     @staticmethod
     def js_vars(player: Player):
@@ -322,27 +338,19 @@ class WorkWaitPage(WaitPage):
 #     pass
 
 
-class ProfitChoice(Page):
+class ProfitChoice(TimePage):
+    timeout_seconds = 120  # set timeout for page
+
     form_model = 'group'
     form_fields = ['profit_choice']
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.id_in_group == 1
-
-    timeout_seconds = 120  # set timeout for page
-    @staticmethod
-    # check if page was submitted timeout occured
-    def before_next_page(player, timeout_happened):
-        if timeout_happened:
-            player.xyz = True
+        parent_condition = TimePage.is_displayed(player)
+        return parent_condition and player.id_in_group == 1
 
 
-
-    pass
-
-
-class SellingChoice(Page):
+class SellingChoice(TimePage):
     timeout_seconds = 120
 
     form_model = 'group'
@@ -350,18 +358,19 @@ class SellingChoice(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.id_in_group == 1
-
-    pass
+        parent_condition = TimePage.is_displayed(player)
+        return parent_condition and player.id_in_group == 1
 
 
 def company_sold(group: Group):
     # draw a random price offer from normal distribution 0 - 100
     group.price_offer = random.randint(0, 100)
     print('Z is ', group.price_offer)
+    if group.accepted_price is None:  # check is selling decision was made
+        return
     # check if offered price >= accepted price
     # if true, switch sold to true
-    if group.price_offer >= group.accepted_price:
+    elif group.price_offer >= group.accepted_price:
         group.sold = True
         print('company is sold is ', group.sold)
     else:
@@ -377,30 +386,55 @@ class ChoiceWaitPage(WaitPage):
         # computer price offer and selling consequence
         company_sold(group)
         # payoffs
-        for p in group.get_players():
-            # investor payoff
-            if p.id_in_group == 1:
-                p.payoff = settings.SESSION_CONFIG_DEFAULTS['dividend']
-                if group.profit_choice == 'owner bonus':
-                    p.payoff += group.profit
-                    if group.sold:
+        if group.profit_choice is None:  # check if profit choice was made
+            # if not, also no selling choice must have been made
+            for p in group.get_players():
+                # investor payoff
+                if p.id_in_group == 1:
+                    p.payoff = settings.SESSION_CONFIG_DEFAULTS['dividend']
+                # worker payoff
+                else:
+                    p.payoff = settings.SESSION_CONFIG_DEFAULTS['wage'] \
+                            + p.num_correct * settings.SESSION_CONFIG_DEFAULTS['piecerate']
+        else:
+            for p in group.get_players():
+                # investor payoff
+                if p.id_in_group == 1:
+                    p.payoff = settings.SESSION_CONFIG_DEFAULTS['dividend']
+                    if group.profit_choice == 'owner bonus':
+                        p.payoff += group.profit
+                        if group.sold:
+                            p.payoff += group.price_offer
+                    elif group.profit_choice != 'owner bonus' and group.sold:
                         p.payoff += group.price_offer
-                elif group.profit_choice != 'owner bonus' and group.sold:
-                    p.payoff += group.price_offer
-            # worker payoff
-            else:
-                p.payoff = settings.SESSION_CONFIG_DEFAULTS['wage'] \
-                        + p.num_correct * settings.SESSION_CONFIG_DEFAULTS['piecerate']
-                if group.profit_choice == 'worker bonus':
-                    p.payoff += group.profit / 3
+                # worker payoff
+                else:
+                    p.payoff = settings.SESSION_CONFIG_DEFAULTS['wage'] \
+                            + p.num_correct * settings.SESSION_CONFIG_DEFAULTS['piecerate']
+                    if group.profit_choice == 'worker bonus':
+                        p.payoff += group.profit / 3
 
     after_all_players_arrive = set_payoffs
 
     pass
 
 
-class ResultsChoice(Page):
+class ResultsChoice(TimePage):
     pass
 
 
-page_sequence = [Game, WorkWaitPage, ProfitChoice, SellingChoice, ChoiceWaitPage, ResultsChoice]
+class Dropout(Page):
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.is_dropout
+
+
+class DropoutVictim(Page):
+    @staticmethod
+    def is_displayed(player: Player):
+        group = player.group
+        return group.has_dropout and player.is_dropout is False
+
+
+page_sequence = [Game, WorkWaitPage, ProfitChoice, SellingChoice, ChoiceWaitPage,
+                 ResultsChoice, Dropout, DropoutVictim]
