@@ -23,24 +23,29 @@ class Player(BasePlayer):
     is_dropout = models.BooleanField(initial=False)
 
 
-class Game(Page):
-    timeout_seconds = 10
+class GamePage(Page):
+    # specific page class on which timeouts need to be checked; inherits all features of the Page class
 
     @staticmethod
-    # check if timeout happened
-    def before_next_page(player: Player, timeout_happened):
+    def is_displayed(player: Player):
+        # show page only for players the group variable "has_dropout" is False == no dropout in group
         group = player.group
+        return group.has_dropout is False
+
+    @staticmethod
+    def before_next_page(player:Player, timeout_happened):
+        group = player.group
+        # check if timeout happened
         if timeout_happened:
             group.has_dropout = True  # indicate that dropout happened in group
             player.is_dropout = True  # indicate that player dropped out
 
 
-class Game2(Page):
+class Game(GamePage):
+    timeout_seconds = 10
 
-    @staticmethod
-    def is_displayed(player: Player):
-        group = player.group
-        return group.has_dropout == False
+
+class Game2(GamePage):
 
     pass
 
@@ -49,23 +54,25 @@ class WaitForOthers(WaitPage):
     @staticmethod
     def is_displayed(player: Player):
         group = player.group
-        return group.has_dropout == False
+        return group.has_dropout is False
     pass
 
 
-class DropoutHappened(Page):
+class Dropout(Page):
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.is_dropout
+
+    pass
+
+
+class DropoutVictim(Page):
     @staticmethod
     def is_displayed(player: Player):
         group = player.group
-        return group.has_dropout
-
-    @staticmethod
-    def app_after_this_page(player: Player, upcoming_apps):
-        group = player.group
-        if group.has_dropout:
-            return upcoming_apps[-1]
+        return group.has_dropout and player.is_dropout is False
 
     pass
 
 
-page_sequence = [Game, Game2, WaitForOthers, DropoutHappened]
+page_sequence = [Game, Game2, WaitForOthers, Dropout, DropoutVictim]
