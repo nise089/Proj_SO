@@ -4,9 +4,12 @@
 
 {{ block content }}
 The profit choice is {{ group.profit_choice }}.
+
+{{ if player.round_number > 1}}
 The accepted price was {{ group.accepted_price }} and the computer offered {{ group.price_offer }}.
-the donations are {{ group.donation }}.
 The company is sold is {{ group.sold }}.
+{{ endif }}
+The donations are {{ group.donation }}.
 Your payoff is {{ player.payoff }}.
 
     {{ next_button }}
