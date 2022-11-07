@@ -1,5 +1,6 @@
 from otree.api import *
 
+from _static.TimePage import TimePage
 
 doc = """
 Your app description
@@ -17,30 +18,36 @@ class Subsession(BaseSubsession):
 
 
 class Group(BaseGroup):
-    pass
+    has_dropout = models.BooleanField(initial=False)
 
 
 class Player(BasePlayer):
     founding = models.BooleanField(
         widget=widgets.RadioSelectHorizontal,
-        label='Do you want found the company?')
-    pass
+        label='Do you want to found the company?')
+    is_dropout = models.BooleanField(initial=False)
 
 
 # PAGES
-class FoundingChoice(Page):
+class FoundingChoice(TimePage):
+    timeout_seconds = 10
     form_model = 'player'
     form_fields = ['founding']
-    pass
 
 
-class ResultsEnd(Page):
+class ResultsEnd(TimePage):
+    timeout_seconds = 10
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.founding == False
-
-    pass
+        return player.founding is False
 
 
-page_sequence = [FoundingChoice, ResultsEnd]
+class Dropout(Page):
+    @staticmethod
+    def is_displayed(player: Player):
+        group = player.group
+        return group.has_dropout
+
+
+page_sequence = [FoundingChoice, ResultsEnd, Dropout]

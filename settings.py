@@ -25,12 +25,6 @@ SESSION_CONFIGS = [
         num_demo_participants=4,
         app_sequence=["app_production_phase"],
     ),
-    dict(
-        name="dropout",
-        display_name="Dropout",
-        num_demo_participants=3,
-        app_sequence=["app_dropout"],
-    )
 ]
 
 # if you set a property in SESSION_CONFIG_DEFAULTS, it will be inherited by all configs
