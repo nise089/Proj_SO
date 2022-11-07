@@ -420,6 +420,11 @@ class ResultsChoice(TimePage):
 
 
 class Dropout(Page):
+
+    @staticmethod
+    def is_displayed(player: Player):
+        group = player.group
+        return group.has_dropout
     pass
 
 
