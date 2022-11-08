@@ -4,44 +4,39 @@
 {# ****************************************************************************************************************** #}
 {# *** TITLE *** #}
 {# ****************************************************************************************************************** #}
-{% block title %}
-{% blocktrans trimmed %} Welcome! {% endblocktrans %}
-{% endblock %}
+{{ block title }}
+{{ blocktrans trimmed }} Welcome! {{ endblocktrans }}
+{{ endblock }}
 
 {# ****************************************************************************************************************** #}
 {# *** CONTENT *** #}
 {# ****************************************************************************************************************** #}
-{% block content %}
+{{ block content }}
 <div class="logo p-3">
         <a href="https://www.uni-regensburg.de/index.html.en" target="_blank">
-            <img src="{% static 'global/Logo_UR.svg' %}" class="img-fluid" alt="University of Regensburg">
+            <img src="{% static 'img/Logo_UR.svg' %}" class="img-fluid" alt="University of Regensburg">
         </a>
     </div>
 <div class="card bg-light mb-3">
     <div class="card-body">
         <h5 class="text-center pb-3">Please read the following carefully.</h5>
         <div class="card-text">
-            <!-- TODO add correct text -->
             <p>Dear participant, </p>
-            <p>The following will provide you with information about the experiment that will help you decide whether
-                you wish to participate. If you agree to participate, please be aware that you are free to withdraw at
-                any
-                point throughout the study. All data collected for this scientific study will remain confidential and
-                anonymous. If you have any further questions concerning this study, please feel free to contact me
-                through Prolific or
-                email:
+            <p>The following will provide information about the experiment to help you decide whether you wish
+                to participate. If you agree to participate, please be aware that you are free to withdraw at any point
+                throughout the study. All data collected for this scientific study will remain confidential and
+                anonymous. If you have any further questions concerning the study, please feel free to contact me via
+                Prolific or email:
             </p>
-            <p> Denise Huber, M.A., University of Regensburg at
-                <a href="mailto:Denise.Huber@ur.de">Denise.Huber@ur.de</a></p>
+            <p> Denise Feigl, M.A., University of Regensburg at
+                <a href="mailto:Denise.Feigl@ur.de">Denise.Feigl@ur.de</a></p>
             <p>
-                By clicking the following box on the space below you indicate that, you
-                understand your rights and agree to participate in the study.
-                You can revoke the consent to the collection and processing of
-                the data at any time by just closing the internet browser.
-                After revoking, no further data will be collected. However, the
-                data collected up to the point of cancellation can continue to be used in this study.
-                Your participation is solicited yet strictly voluntary. All information will be kept confidential,
-                and your name will not be associated with any research findings.
+                By ticking the box below, you confirm that you understand your rights and agree to participate in the
+                study. You can revoke your consent to collecting and processing the data at any time by just closing
+                the internet browser. After revoking, no further data will be collected. However, the data collected up
+                to the point of cancellation will be used for this study. Your participation is solicited yet strictly
+                voluntary. All information will be kept confidential, and your name will not be associated with any
+                research findings.
             </p>
         </div>
         <div>
@@ -55,5 +50,4 @@
 <div style="text-align:center;">
     <button class="otree-btn-next btn btn-primary next-button otree-next-button">Next</button>
 </div>
-
-{% endblock %}
+{{ endblock }}

@@ -1,4 +1,5 @@
 from otree.api import *
+import settings
 
 c = cu
 
@@ -36,6 +37,9 @@ class Consent(Page):
 
 class Welcome(Page):
     form_model = 'player'
+
+    def vars_for_template(self):
+        return dict(participation_fee=self.session.config['participation_fee'])
 
 
 page_sequence = [Consent, Welcome]
