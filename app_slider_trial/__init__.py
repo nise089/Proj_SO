@@ -16,8 +16,8 @@ Slider task based on Github repository see code and documentation here: https://
 
 class Constants(BaseConstants):
     name_in_url = "sliders"
-    players_per_group = 3
-    num_rounds = 3  # TODO set number from calibration
+    players_per_group = None
+    num_rounds = 1
 
     instructions_template = __name__ + "/instructions.html"
 
@@ -41,11 +41,6 @@ def creating_session(subsession: Subsession):
 
 
 class Group(BaseGroup):
-    tot_effort = models.IntegerField()
-    profit = models.FloatField()
-
-
-
     pass
 
 
@@ -265,32 +260,10 @@ class Game(Page):
         if puzzle and puzzle.response_timestamp:
             player.elapsed_time = puzzle.response_timestamp - puzzle.timestamp
             player.num_correct = puzzle.num_correct
-            if player.round_number == 1:
-                player.payoff = settings.SESSION_CONFIG_DEFAULTS['wage'] + puzzle.num_correct * \
-                                settings.SESSION_CONFIG_DEFAULTS['piecerate']
-            else:
-                prev_player = player.in_round(player.round_number - 1)
-                prev_payoff = prev_player.payoff
-                player.payoff = prev_payoff + settings.SESSION_CONFIG_DEFAULTS['wage'] + puzzle.num_correct * \
-                                settings.SESSION_CONFIG_DEFAULTS['piecerate']
 
 
-class ResultsWaitPage(WaitPage):
-
-    def set_profit(group: Group):
-        players = group.get_players()
-        effort = [p.num_correct for p in players]
-        group.tot_effort = sum(effort)
-        revenue = settings.SESSION_CONFIG_DEFAULTS['prod_piecerate'] * group.tot_effort
-        group.profit = revenue + settings.SESSION_CONFIG_DEFAULTS['Rfixed'] \
-                      - settings.SESSION_CONFIG_DEFAULTS['n'] * settings.SESSION_CONFIG_DEFAULTS['wage']
-
-    after_all_players_arrive = set_profit
+class Results(Page):
     pass
 
 
-class ResultsWork(Page):
-    pass
-
-
-page_sequence = [Game, ResultsWaitPage, ResultsWork]
+page_sequence = [Game, Results]

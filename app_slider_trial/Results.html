@@ -21,7 +21,9 @@
     <div class="card-body">
         <h5 class="text-center pb-3"> </h5>
         <div class="card-text">
-            <p> You have solved [sliders_solved] sliders. </p>
+            <p>
+                You have correctly moved {{ player.num_correct }} sliders in {{ player.elapsed_time|to2 }} seconds.
+            </p>
             <p> Click ‘next’ to move on to Part 2. </p>
         </div>
     </div>
