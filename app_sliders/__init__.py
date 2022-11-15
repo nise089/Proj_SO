@@ -289,8 +289,8 @@ class ResultsWaitPage(WaitPage):
     pass
 
 
-class Results(Page):
+class ResultsWork(Page):
     pass
 
 
-page_sequence = [Game, ResultsWaitPage, Results]
+page_sequence = [Game, ResultsWaitPage, ResultsWork]
