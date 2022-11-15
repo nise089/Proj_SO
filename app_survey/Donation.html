@@ -5,7 +5,7 @@
 {# *** TITLE *** #}
 {# ****************************************************************************************************************** #}
 {{ block title }}
-{{ blocktrans trimmed }} Questionnaire {{ endblocktrans }}
+{{ blocktrans trimmed }} Questionnaire III {{ endblocktrans }}
 {{ endblock }}
 
 {# ****************************************************************************************************************** #}
@@ -20,19 +20,26 @@
 <div class="card bg-light mb-3">
     <div class="card-body">
         <h5 class="text-center pb-3"> </h5>
+        Please indicate how often you show following behavior on a scale from 'never' to 'regulary'.
         <div class="card-text">
-            <p>
-                Imagine yourself in a situation where you are given $10, which you can keep to yourself or give to
-                another person, all or any portion of it.
-                <br>
-                Please state how much of this hypothetical $10 endowment you would share with the other imaginary person.
-            </p>
-            <!-- TODO add field here           -->
-            <p>
-                Please indicate how willing you are to behave in the following way.
-                How willing are you to punish someone who treats you unfairly, even if there may be costs for you?
-            <!--  TODO add slider here: see Proj_Prosoical_otree Survey1.html-->
-            </p>
+            <table class="table">
+                <tr>
+                    <th> </th>
+                    <td> never </td>
+                    <td> rarely </td>
+                    <td> sometimes </td>
+                    <td> often </td>
+                    <td> regularly </td>
+                </tr>
+                {{ for field in form }}
+                    <tr>
+                        <th>{{ field.label }}</th>
+                        {{ for choice in field }}
+                            <td>{{ choice }}</td>
+                        {{ endfor }}
+                    </tr>
+                {{ endfor }}
+            </table>
 
         </div>
     </div>

@@ -14,6 +14,12 @@ SESSION_CONFIGS = [
         app_sequence=["app_welcome"],
     ),
     dict(
+        name="survey",
+        display_name="Survey",
+        num_demo_participants=1,
+        app_sequence=["app_survey"],
+    ),
+    dict(
         name="founding",
         display_name="Founding choice",
         num_demo_participants=1,
