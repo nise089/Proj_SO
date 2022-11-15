@@ -234,6 +234,10 @@ def play_game(player: Player, message: dict):
     raise RuntimeError("unrecognized message from client")
 
 
+class TrialIntro(Page):
+    pass
+
+
 class Game(Page):
     timeout_seconds = 120
 
@@ -266,4 +270,4 @@ class Results(Page):
     pass
 
 
-page_sequence = [Game, Results]
+page_sequence = [TrialIntro, Game, Results]

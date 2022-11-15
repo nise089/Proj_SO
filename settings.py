@@ -2,6 +2,12 @@ from os import environ
 
 SESSION_CONFIGS = [
     dict(
+        name="Part1",
+        display_name="Part1",
+        num_demo_participants=3,
+        app_sequence=["app_survey", "app_slider_trial"],
+    ),
+    dict(
         name="sliders",
         display_name="slider trial",
         num_demo_participants=3,
