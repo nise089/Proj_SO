@@ -21,10 +21,30 @@ class Group(BaseGroup):
     pass
 
 
+def make_choice(label):
+    return models.IntegerField(
+        label=label,
+        choice=[
+            [1, 'never'],
+            [2, 'rarely'],
+            [3, 'sometimes'],
+            [4, 'often'],
+            [5, 'regularly'],
+        ],
+        widget=widgets.RadioSelectHorizontal,
+    )
+
+
 class Player(BasePlayer):
     age = models.IntegerField(
         min=18, max=100,
         label='Please indicate your age.'
+    )
+
+    gender = models.StringField(
+        label='What is the gender you associate with?',
+        widget=widgets.RadioSelectHorizontal,
+        choices=['Male', 'Female', 'Diverse']
     )
 
     edu = models.StringField(
@@ -291,24 +311,92 @@ class Player(BasePlayer):
             'Zimbabwe'
         ]
     )
-    # scale from Polific personal income (GBP)* exchange rate 1 GBP:1.39 $
-    choices = [
-        'Less than $13,800',
-        '$13,800 - $27,799',
-        '$27,800 - $41,699',
-        '$41,700 - $55,599',
-        '$55,600 - $69,499',
-        '$69,500 - $83,399',
-        '$83,400 - $97,299',
-        '$97,300 - $111,199',
-        '$111,200 - $125,099',
-        '$125,100 - $138,999',
-        '$139,000 - $208,499',
-        'More than $208,500',
-        'Rather not say',
-    ]
 
-    pass
+    income = models.StringField(
+        label='What is your income?',
+        # scale from Polific personal income (GBP)* exchange rate 1 GBP:1.39 $
+        choices=[
+            'Less than $13,800',
+            '$13,800 - $27,799',
+            '$27,800 - $41,699',
+            '$41,700 - $55,599',
+            '$55,600 - $69,499',
+            '$69,500 - $83,399',
+            '$83,400 - $97,299',
+            '$97,300 - $111,199',
+            '$111,200 - $125,099',
+            '$125,100 - $138,999',
+            '$139,000 - $208,499',
+            'More than $208,500',
+            'Rather not say',
+        ]
+    )
+
+    work = models.StringField(
+        label='What is the type of occupation?',
+        widget=widgets.RadioSelectHorizontal,
+        choices=['blue collar worker', 'white collar worker']
+    )
+
+    industry = models.StringField(
+        label='In which industry are you working?',
+        # Prolific industry classifications
+        choices=[
+            'Arts, Design, Entertainment and Recreation',
+            'Aviation',
+            'Broadcasting',
+            'College, University and Adult Education',
+            'Computer and Electronics Manufacturing',
+            'Construction',
+            'Education',
+            'Emergency service',
+            'Finance and Insurance',
+            'Food processing and services',
+            'Government and Public Administration',
+            'Grocery',
+            'Health Care and Social Assistance',
+            'Homemaker',
+            'Hotel and Food Services',
+            'Information Services and Data Processing',
+            'Legal Services',
+            'Other Manufacturing',
+            'Market Research',
+            'Medical/ Healthcare',
+            'Ministry',
+            'Mining',
+            'Nuclear Power, Oil and Gas',
+            'Product Development',
+            'Real Estate Rental and Leasing',
+            'Religious',
+            'Research laboratories',
+            'Retail',
+            'Sanitation',
+            'Scientific or Technical Service',
+            'Software',
+            'Telecommunications',
+            'Tourism and hospitality',
+            'Transportation and Warehousing'
+            'Utilities',
+            'Veterinary',
+            'Wholesale',
+            'Video Games',
+            'Other Industry'
+        ]
+    )
+
+    DG_hypo = models.IntegerField(
+        label='Please state how much of this hypothetical $10 endowment you would share with the other imaginary person',
+        min=0, max=10,
+    )
+
+    reciprocity_neg = models.IntegerField(
+        label= 'How willing are you to punish someone who treats you unfairly, even if there may be costs for you?',
+        min=0, max=10,
+    )
+
+    donated = make_choice('How often do you donate money to a charitable organization?')
+
+    volunteering = make_choice('How often do you volunteer for a good cause?')
 
 
 # PAGES
