@@ -20,10 +20,10 @@ SESSION_CONFIGS = [
         app_sequence=["app_welcome"],
     ),
     dict(
-        name="survey",
-        display_name="Survey",
+        name="Part3",
+        display_name="Part 3",
         num_demo_participants=1,
-        app_sequence=["app_survey"],
+        app_sequence=["app_feedback"],
     ),
     dict(
         name="founding",

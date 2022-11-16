@@ -14,13 +14,8 @@ class C(BaseConstants):
 def make_choice(label):
     return models.IntegerField(
         label=label,
-        choices=[
-            [1, 'strongly disagree'],
-            [2, 'somewhat disagree'],
-            [3, 'neither agree nor disagree'],
-            [4, 'somewhat agree'],
-            [5, 'strongly agree']
-        ]
+        choices=[1, 2, 3, 4, 5],
+        widget=widgets.RadioSelectHorizontal
     )
 
 
@@ -57,14 +52,28 @@ class Player(BasePlayer):
     feedback_other = make_textfield('Is there anything else you want to tell us?')
 
     feedback_clarity = models.IntegerField(
-        label="On a scale from 0 'not clear at all' to 10 'perfectly clear'. How clear were the instructions to you?",
-        max=0, min=10,
+        label="On a scale from 0 'not clear at all' to 10 'perfectly clear', how clear were the instructions to you?",
+        choices=[1, 2, 3, 5, 6, 7, 8, 9, 10],
         widget=widgets.RadioSelectHorizontal
     )
 
 
-class Intro(Page):
+class Part3(Page):
     pass
 
 
-page_sequence = [Intro]
+class Q1(Page):
+    form_model = 'player'
+    form_fields = ['attention_randomly', 'attention_understood', 'attention_left', 'attention_right']
+
+
+class Q2(Page):
+    form_model = 'player'
+    form_fields = ['feedback_problems', 'feedback_typos', 'feedback_clarity', 'feedback_other']
+
+
+class Payment(Page):
+    pass
+
+
+page_sequence = [Part3, Q1, Q2, Payment]

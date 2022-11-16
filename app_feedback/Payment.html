@@ -5,7 +5,7 @@
 {# *** TITLE *** #}
 {# ****************************************************************************************************************** #}
 {{ block title }}
-{{ blocktrans trimmed }} Part 3 {{ endblocktrans }}
+{{ blocktrans trimmed }} Your payment {{ endblocktrans }}
 {{ endblock }}
 
 {# ****************************************************************************************************************** #}
@@ -19,9 +19,23 @@
     </div>
 <div class="card bg-light mb-3">
     <div class="card-body">
-        <h5 class="text-center pb-3">Please indicate the extent to which you agree with the following statements</h5>
+        <h5 class="text-center pb-3">Thank you for participating!</h5>
         <div class="card-text">
-            {{ formfields }}
+          <p> In Part 2, you were [XX] in a [XXX].</p>
+          <table class="table">
+                <tr>
+                    <th> Participant fee </th>
+                    <th> Your payoff </th>
+                    <th> Your total payment </th>
+                    <th> Donation </th>
+                </tr>
+                <tr>
+                  <td> participation_fee  </td>
+                  <td> player.payoff  </td>
+                  <td> player.payment </td>
+                  <td> player.donation </td>
+                </tr>
+            </table>
        </div>
     </div>
 </div>

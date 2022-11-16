@@ -1,26 +1,48 @@
 {{ extends 'global/Page.html' }}
-{{ block title }}Bitte beantworten Sie die folgenden Fragen{{ endblock }}
 
+
+{# ****************************************************************************************************************** #}
+{# *** TITLE *** #}
+{# ****************************************************************************************************************** #}
+{{ block title }}
+{{ blocktrans trimmed }} Part 3 {{ endblocktrans }}
+{{ endblock }}
+
+{# ****************************************************************************************************************** #}
+{# *** CONTENT *** #}
+{# ****************************************************************************************************************** #}
 {{ block content }}
-
-{{ formfield 'age' }}
-{{ formfield 'gender' }}
-{{ formfield 'job' }}
-<br>
-<p>
-<b> 
-Wie gut beschreibt jede der nachfolgenden Aussagen Sie als Person?
-<br>
-[Skala: 0-beschreibt mich überhaupt nicht bis 10-beschreibt mich perfekt]
-</b>
-</p>
-{{ formfield 'pos_reciprocity' }}
-{{ formfield 'neg_reciprocity' }}
-<br>
-{{ formfield 'trust_general' }}
-
-
-
-{{ next_button }}
-
+<div class="logo p-3">
+        <a href="https://www.uni-regensburg.de/index.html.en" target="_blank">
+            <img src="{% static 'img/Logo_UR.svg' %}" class="img-fluid" alt="University of Regensburg">
+        </a>
+    </div>
+<div class="card bg-light mb-3">
+    <div class="card-body">
+        <h5 class="text-center pb-3">Please indicate the extent to which you agree with the following statements</h5>
+        <div class="card-text">
+                <table class="table">
+                <tr>
+                    <th> </th>
+                    <td> strongly disagree </td>
+                    <td> somewhat disagree </td>
+                    <td> neither agree nor disagree </td>
+                    <td> somewhat agree </td>
+                    <td> strongly agree </td>
+                </tr>
+                {{ for field in form }}
+                    <tr>
+                        <th>{{ field.label }}</th>
+                        {{ for choice in field }}
+                            <td>{{ choice }}</td>
+                        {{ endfor }}
+                    </tr>
+                {{ endfor }}
+            </table>
+       </div>
+    </div>
+</div>
+<div style="text-align:center;">
+    <button class="otree-btn-next btn btn-primary next-button otree-next-button">Next</button>
+</div>
 {{ endblock }}
