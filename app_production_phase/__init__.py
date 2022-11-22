@@ -260,22 +260,28 @@ def play_game(player: Player, message: dict):
 def group_by_arrival_time_method(subsession, waiting_players):
     """ set same group composition as before """
     print('in group_by_arrival_time_method')
-    group_dict = { }
     all_group_ids = [p.participant.group_id for p in waiting_players]
-    print(all_group_ids)
-    group_ids = set(all_group_ids)
-    print(all_group_ids)
-    for key in group_ids:
-        group_dict[key] = [p for p in waiting_players if p.participant.group_id == key]
-        print('Dictionary:' + str(group_dict))
-    for key in group_dict:
-        print('Current Group id:' + str(key))
-        current_group = group_dict.get(key)
-        print('players of this group:' + str(current_group))
+    print('allGroupIds', all_group_ids)
+    unique_group_ids = list(set(all_group_ids))
+    print(unique_group_ids)
+    group_dict = map_players_to_group(unique_group_ids, waiting_players)
+    for group_id in group_dict:
+        print('Current Group id:', group_id)
+        current_group = group_dict.get(group_id)
+        print('players of this group:', current_group)
         if len(current_group) == 4:
             print('about to create a group')
-            return [current_group[0], current_group[1], current_group[0], current_group[1]]
+            return current_group
     print('not enough players yet to create a group')
+
+
+def map_players_to_group(group_ids, waiting_players):
+    """ map waiting players to their corresponding group and return these in a dictionary """
+    group_dict = {}
+    for group_id in group_ids:
+        group_dict[group_id] = [p for p in waiting_players if p.participant.group_id == group_id]
+        print('Dictionary:' + str(group_dict))
+    return group_dict
 
 
 class GroupingWaitPage(WaitPage):
