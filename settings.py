@@ -37,6 +37,12 @@ SESSION_CONFIGS = [
         num_demo_participants=8,
         app_sequence=["app_welcome", "app_production_phase"],
     ),
+    dict(
+        name="Part2",
+        display_name="Part2",
+        num_demo_participants=8,
+        app_sequence=["app_welcome", "app_founding_phase", "app_production_phase"],
+    ),
 ]
 
 # if you set a property in SESSION_CONFIG_DEFAULTS, it will be inherited by all configs

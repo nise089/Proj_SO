@@ -22,7 +22,7 @@ includes timeouts and dropout pages
 class Constants(BaseConstants):
     name_in_url = "production"
     players_per_group = 4
-    num_rounds = 3  # TODO set number from calibration
+    num_rounds = 2  # TODO set number from calibration
     instructions_template = __name__ + "/instructions.html"
 
 
@@ -257,37 +257,33 @@ def play_game(player: Player, message: dict):
 
 
 # Pages
+def group_by_arrival_time_method(subsession, waiting_players):
+    """ set same group composition as before """
+    print('in group_by_arrival_time_method')
+    group_dict = { }
+    all_group_ids = [p.participant.group_id for p in waiting_players]
+    print(all_group_ids)
+    group_ids = set(all_group_ids)
+    print(all_group_ids)
+    for key in group_ids:
+        group_dict[key] = [p for p in waiting_players if p.participant.group_id == key]
+        print('Dictionary:' + str(group_dict))
+    for key in group_dict:
+        print('Current Group id:' + str(key))
+        current_group = group_dict.get(key)
+        print('players of this group:' + str(current_group))
+        if len(current_group) == 4:
+            print('about to create a group')
+            return [current_group[0], current_group[1], current_group[0], current_group[1]]
+    print('not enough players yet to create a group')
+
+
 class GroupingWaitPage(WaitPage):
     group_by_arrival_time = True
 
     @staticmethod
     def is_displayed(player):
         return player.round_number == 1
-
-
-def set_group_id(group: Group):
-    """ Stor Group ID of this subsession in a participant variable """
-    for p in group.get_players():
-        p.participant.group_id = group.id_in_subsession
-        print(p.participant.group_id)
-
-
-class RoleWaitPage(WaitPage):
-    @staticmethod
-    def assign_roles(group: Group):
-        """ call set_group_id method and assign role (job) to each participant in the group """
-        set_group_id(group)
-        for p in group.get_players():
-            if p.id_in_group == 1:
-                p.participant.job = "owner"
-            else:
-                p.participant.job = "worker"
-
-    @staticmethod
-    def is_displayed(player: Player):
-        return player.round_number == 1
-
-    after_all_players_arrive = assign_roles
 
 
 class WorkingStage(TimePage):
@@ -460,5 +456,5 @@ class Dropout(Page):
     pass
 
 
-page_sequence = [GroupingWaitPage, RoleWaitPage, WorkingStage, Game, WorkWaitPage, ProfitChoice, SellingChoice,
+page_sequence = [GroupingWaitPage, WorkingStage, Game, WorkWaitPage, ProfitChoice, SellingChoice,
                  ChoiceWaitPage, ResultsChoice, Dropout]
