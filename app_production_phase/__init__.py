@@ -258,6 +258,14 @@ def play_game(player: Player, message: dict):
 
 
 # Pages
+class GroupingWaitPage(WaitPage):
+    group_by_arrival_time = True
+
+    @staticmethod
+    def is_displayed(player):
+        return player.round_number == 1
+
+
 class WorkingStage(TimePage):
     timeout_seconds = 20
 
@@ -428,5 +436,5 @@ class Dropout(Page):
     pass
 
 
-page_sequence = [WorkingStage, Game, WorkWaitPage, ProfitChoice, SellingChoice, ChoiceWaitPage,
+page_sequence = [GroupingWaitPage, Game, WorkingStage, WorkWaitPage, ProfitChoice, SellingChoice, ChoiceWaitPage,
                  ResultsChoice, Dropout]
