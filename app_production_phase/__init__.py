@@ -74,7 +74,6 @@ class Player(BasePlayer):
     sold = models.StringField(initial='not sold')
 
     is_dropout = models.BooleanField(initial=False)
-    job = models.StringField(initial="NA")
 
 
 # puzzle-specific stuff
@@ -266,14 +265,27 @@ class GroupingWaitPage(WaitPage):
         return player.round_number == 1
 
 
+def set_group_id(group: Group):
+    """ Stor Group ID of this subsession in a participant variable """
+    for p in group.get_players():
+        p.participant.group_id = group.id_in_subsession
+        print(p.participant.group_id)
+
+
 class RoleWaitPage(WaitPage):
     @staticmethod
     def assign_roles(group: Group):
+        """ call set_group_id method and assign role (job) to each participant in the group """
+        set_group_id(group)
         for p in group.get_players():
             if p.id_in_group == 1:
-                p.job = "owner"
+                p.participant.job = "owner"
             else:
-                p.job = "worker"
+                p.participant.job = "worker"
+
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.round_number == 1
 
     after_all_players_arrive = assign_roles
 
@@ -284,7 +296,7 @@ class WorkingStage(TimePage):
     @staticmethod
     def is_displayed(player: Player):
         parent_condition = TimePage.is_displayed(player)
-        return parent_condition and player.job == "worker"
+        return parent_condition and player.participant.job == "worker"
 
 
 class Game(Page):
@@ -295,7 +307,7 @@ class Game(Page):
     @staticmethod
     def is_displayed(player: Player):
         parent_condition = TimePage.is_displayed(player)
-        return parent_condition and player.job == "worker"
+        return parent_condition and player.participant.job == "worker"
 
     @staticmethod
     def js_vars(player: Player):
@@ -346,7 +358,7 @@ class ProfitChoice(TimePage):
     @staticmethod
     def is_displayed(player: Player):
         parent_condition = TimePage.is_displayed(player)
-        return parent_condition and player.job == "owner"
+        return parent_condition and player.participant.job == "owner"
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
@@ -365,7 +377,7 @@ class SellingChoice(TimePage):
     @staticmethod
     def is_displayed(player: Player):
         parent_condition = TimePage.is_displayed(player)
-        return parent_condition and player.job == "owner" and player.round_number != 1
+        return parent_condition and player.participant.job == "owner" and player.round_number != 1
 
 
 def company_sold(group: Group):
