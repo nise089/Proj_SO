@@ -23,7 +23,6 @@ class Constants(BaseConstants):
     name_in_url = "production"
     players_per_group = 4
     num_rounds = 3  # TODO set number from calibration
-
     instructions_template = __name__ + "/instructions.html"
 
 
@@ -75,6 +74,7 @@ class Player(BasePlayer):
     sold = models.StringField(initial='not sold')
 
     is_dropout = models.BooleanField(initial=False)
+    job = models.StringField(initial="NA")
 
 
 # puzzle-specific stuff
@@ -266,13 +266,25 @@ class GroupingWaitPage(WaitPage):
         return player.round_number == 1
 
 
+class RoleWaitPage(WaitPage):
+    @staticmethod
+    def assign_roles(group: Group):
+        for p in group.get_players():
+            if p.id_in_group == 1:
+                p.job = "owner"
+            else:
+                p.job = "worker"
+
+    after_all_players_arrive = assign_roles
+
+
 class WorkingStage(TimePage):
     timeout_seconds = 20
 
     @staticmethod
     def is_displayed(player: Player):
         parent_condition = TimePage.is_displayed(player)
-        return parent_condition and player.id_in_group != 1
+        return parent_condition and player.job == "worker"
 
 
 class Game(Page):
@@ -283,7 +295,7 @@ class Game(Page):
     @staticmethod
     def is_displayed(player: Player):
         parent_condition = TimePage.is_displayed(player)
-        return parent_condition and player.id_in_group != 1
+        return parent_condition and player.job == "worker"
 
     @staticmethod
     def js_vars(player: Player):
@@ -436,5 +448,5 @@ class Dropout(Page):
     pass
 
 
-page_sequence = [GroupingWaitPage, Game, WorkingStage, WorkWaitPage, ProfitChoice, SellingChoice, ChoiceWaitPage,
-                 ResultsChoice, Dropout]
+page_sequence = [GroupingWaitPage, RoleWaitPage, WorkingStage, Game, WorkWaitPage, ProfitChoice, SellingChoice,
+                 ChoiceWaitPage, ResultsChoice, Dropout]
