@@ -346,7 +346,7 @@ class ProfitChoice(TimePage):
     @staticmethod
     def is_displayed(player: Player):
         parent_condition = TimePage.is_displayed(player)
-        return parent_condition and player.id_in_group == 1
+        return parent_condition and player.job == "owner"
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
@@ -365,7 +365,7 @@ class SellingChoice(TimePage):
     @staticmethod
     def is_displayed(player: Player):
         parent_condition = TimePage.is_displayed(player)
-        return parent_condition and player.id_in_group == 1 and player.round_number != 1
+        return parent_condition and player.job == "owner" and player.round_number != 1
 
 
 def company_sold(group: Group):
