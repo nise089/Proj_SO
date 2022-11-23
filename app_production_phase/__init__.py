@@ -259,20 +259,19 @@ def play_game(player: Player, message: dict):
 # Pages
 def group_by_arrival_time_method(subsession, waiting_players):
     """ set same group composition as before """
-    print('in group_by_arrival_time_method')
-    all_group_ids = [p.participant.group_id for p in waiting_players]
-    print('allGroupIds', all_group_ids)
-    unique_group_ids = list(set(all_group_ids))
-    print(unique_group_ids)
+    waiting_players_group_ids = [p.participant.group_id for p in waiting_players]
+    unique_group_ids = deduplicate_waiting_players_group_ids(waiting_players_group_ids)
     group_dict = map_players_to_group(unique_group_ids, waiting_players)
     for group_id in group_dict:
-        print('Current Group id:', group_id)
         current_group = group_dict.get(group_id)
-        print('players of this group:', current_group)
         if len(current_group) == 4:
-            print('about to create a group')
             return current_group
-    print('not enough players yet to create a group')
+
+
+def deduplicate_waiting_players_group_ids(waiting_players_group_ids):
+    """ identify unique group id in group ids of all waiting players and return these """
+    unique_group_ids = list(set(waiting_players_group_ids))
+    return unique_group_ids
 
 
 def map_players_to_group(group_ids, waiting_players):
