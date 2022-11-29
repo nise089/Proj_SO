@@ -40,7 +40,7 @@ SESSION_CONFIGS = [
     dict(
         name="Part2",
         display_name="Part2",
-        num_demo_participants=8,
+        num_demo_participants=16,
         app_sequence=["app_welcome", "app_founding_phase", "app_founding_phase2", "app_production_phase"],
     ),
 ]
@@ -72,7 +72,7 @@ REAL_WORLD_CURRENCY_CODE = 'USD'
 USE_POINTS = True
 
 DEMO_PAGE_INTRO_HTML = ''
-PARTICIPANT_FIELDS = ['is_dropout', 'group_id', 'job', 'company_size', 'treatment']
+PARTICIPANT_FIELDS = ['is_dropout', 'group_id', 'job', 'company_size', 'company_type']
 SESSION_FIELDS = ['params']
 ROOMS = []
 

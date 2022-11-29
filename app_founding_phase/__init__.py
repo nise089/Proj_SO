@@ -1,5 +1,6 @@
 from otree.api import *
 
+from _static.Enums import CompanyTypesEnum, JobsEnum
 from _static.TimePage import TimePage
 
 doc = """
@@ -33,29 +34,44 @@ class GroupingWaitPage(WaitPage):
     group_by_arrival_time = True
 
 
-def set_group_id(group: Group):
-    """ Stor Group ID of this subsession in a participant variable """
-    for p in group.get_players():
-        p.participant.group_id = group.id_in_subsession
-        print(p.participant.group_id)
-
-
 class RoleWaitPage(WaitPage):
     @staticmethod
-    def assign_roles(group: Group):
+    def assign_roles_and_company_type(group: Group):
         """ call set_group_id method and assign role (job) to each participant in the group """
-        set_group_id(group)
-        for p in group.get_players():
-            if p.id_in_group == 1:
-                p.participant.job = "owner"
-            else:
-                p.participant.job = "worker"
+        for player in group.get_players():
+            RoleWaitPage.set_group_id(player)
+            RoleWaitPage.assign_role(player)
+            RoleWaitPage.assign_company_type(player)
+
+    @staticmethod
+    def set_group_id(player: Player):
+        """ Stor Group ID of this subsession in a participant variable """
+        player.participant.group_id = player.group.id_in_subsession
+        print(player.participant.group_id)
+
+    @staticmethod
+    def assign_role(player: Player):
+        """ assign role to each player of one group """
+        if player.id_in_group == 1:
+            player.participant.job = JobsEnum.OWNER
+        else:
+            player.participant.job = JobsEnum.WORKER
+
+    @staticmethod
+    def assign_company_type(player: Player):
+        """ assign company type to each player of the same group """
+        if (player.participant.group_id % 2) == 0:
+            player.participant.company_type = CompanyTypesEnum.FOUNDATION_OWNED
+            print("company type is", player.participant.company_type.value)
+        else:
+            player.participant.company_type = CompanyTypesEnum.INVESTOR_OWNED
+            print("company type is", player.participant.company_type)
 
     @staticmethod
     def is_displayed(player: Player):
         return player.round_number == 1
 
-    after_all_players_arrive = assign_roles
+    after_all_players_arrive = assign_roles_and_company_type
 
 
 class Role(Page):
@@ -70,7 +86,7 @@ class FoundingChoice(TimePage):
     @staticmethod
     def is_displayed(player: Player):
         parent_condition = TimePage.is_displayed(player)
-        return parent_condition and player.participant.job == "owner"
+        return parent_condition and player.participant.job == JobsEnum.OWNER
 
 
 class FoundingWaitPage(WaitPage):
@@ -93,4 +109,4 @@ class Dropout(Page):
         return group.has_dropout
 
 
-page_sequence = [GroupingWaitPage, RoleWaitPage, Role, FoundingChoice, FoundingWaitPage,  ResultsEnd, Dropout]
+page_sequence = [GroupingWaitPage, RoleWaitPage, Role, FoundingChoice, FoundingWaitPage, ResultsEnd, Dropout]
