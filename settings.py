@@ -13,7 +13,12 @@ SESSION_CONFIGS = [
         num_demo_participants=1,
         app_sequence=["app_instructions"],
     ),
-
+    dict(
+        name="ControlQ",
+        display_name="ControlQ+Preferences",
+        num_demo_participants=3,
+        app_sequence=["app_control_and_preferences"],
+    ),
     dict(
         name="sliders",
         display_name="slider trial",
