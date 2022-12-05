@@ -14,7 +14,29 @@
     </div>
     <div class="card-body">
         <h5 class="text-center pb-3"> Your company preference </h5>
-        {{ formfields }}
+        <p>
+            Assume you were a (normal) worker and could choose for which company type you want to work.
+            <br> In which company would you prefer to work?
+        </p>
+        <ul id="items" class="list-group list-group-numbered" style="cursor: move">
+            {{ for choice in C.CHOICES }}
+            <li data-id="{{ choice }}" class="list-group-item">{{ choice }}</li>
+            {{ endfor }}
+        </ul>
+
+        <script src="https://cdn.jsdelivr.net/npm/sortablejs@latest/Sortable.min.js"></script>
+        <script>
+            let el = document.getElementById('items');
+            let sortable = Sortable.create(el, {
+                onChange: function (evt) {
+                    document.getElementById('company_ranking_worker').value = sortable.toArray().join(',');
+                }
+            });
+        </script>
+
+        <input type="hidden" name="company_ranking_worker" id="company_ranking_worker">
+
+        {{ formfield_errors 'company_ranking_worker' }}
     </div>
 </div>
 <div style="text-align:center;">

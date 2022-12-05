@@ -10,6 +10,7 @@ class C(BaseConstants):
     NAME_IN_URL = 'app_instructions'
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 1
+    CHOICES = ['A', 'B', 'C', 'D']
 
 
 class Subsession(BaseSubsession):
@@ -18,18 +19,6 @@ class Subsession(BaseSubsession):
 
 class Group(BaseGroup):
     pass
-
-
-def make_type_choice(label):
-    return models.IntegerField(
-        label= label,
-        choices=[
-            [1, "Company A"],
-            [2, "Company B"],
-            [3, "Company C"],
-            [4, "Company D"]
-        ],
-    )
 
 
 class Player(BasePlayer):
@@ -73,15 +62,9 @@ class Player(BasePlayer):
         widget=widgets.RadioSelect
     )
 
-    company_choice_owner = make_type_choice(
-        "Assume you were an owner and could choose which company type to found. /"
-        "Which company would you prefer to found?"
-    )
+    company_ranking_owner = models.StringField()
 
-    company_choice_worker = make_type_choice(
-        "Assume you were a (normal) worker and could choose for which company type you want to work. /"
-        "In which company would you prefer to work?"
-    )
+    company_ranking_worker = models.StringField()
 
 
 # PAGES
@@ -132,16 +115,16 @@ class ControlQuestions(Page):
 
 class CompanyChoiceOwner(Page):
     form_model = 'player'
-    form_fields = ['company_choice_owner']
+    form_fields = ['company_ranking_owner']
 
 
 class CompanyChoiceWorker(Page):
     form_model = 'player'
-    form_fields = ['company_choice_worker']
+    form_fields = ['company_ranking_worker']
 
 
 class Randomization(WaitPage):
     pass
 
 
-page_sequence = [ControlQuestions, CompanyChoiceOwner, CompanyChoiceWorker]
+page_sequence = [CompanyChoiceOwner, CompanyChoiceWorker]
