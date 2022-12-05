@@ -15,7 +15,38 @@
     <div class="card-body">
         <h5 class="text-center pb-3"> Please select the correct answers </h5>
         Tipp: More than one answer may be correct.
-        {{ formfields }}
+        <br> The more sliders a worker solves, the higher…
+        <br>
+        {{ for field in C.MORE_SLIDERS }}
+            <label>
+            <input type="checkbox" name="{{ field }}" value="1">
+                {{ field }}
+            </label><br>
+        {{ endfor }}
+        <br> Assume the profit choice is the worker bonus. Who receives a share of the profit?
+        <br>
+        {{ for field in C.WORKER_BONUS }}
+            <label>
+            <input type="checkbox" name="{{ field }}" value="1">
+                {{ field }}
+            </label><br>
+        {{ endfor }}
+        <br> In the selling choice, the company is sold if …
+        <br>
+        {{ for field in C.SELLING }}
+            <label>
+            <input type="checkbox" name="{{ field }}" value="1">
+                {{ field }}
+            </label><br>
+        {{ endfor }}
+        <br> The company types differ in ...
+        <br>
+        {{ for field in C.TYPE }}
+            <label>
+            <input type="checkbox" name="{{ field }}" value="1">
+                {{ field }}
+            </label><br>
+        {{ endfor }}
     </div>
 </div>
 <div style="text-align:center;">

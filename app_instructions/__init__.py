@@ -1,6 +1,5 @@
 from otree.api import *
 
-
 doc = """
 Your app description
 """
@@ -11,6 +10,22 @@ class C(BaseConstants):
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 1
     CHOICES = ['A', 'B', 'C', 'D']
+    MORE_SLIDERS = [
+        'the profit',
+        "the worker's payoff",
+        "the owner’s payoff if s/he chooses the owner bonus in the profit choice after the same round"
+    ]
+    WORKER_BONUS = ["Worker", "Owner, who is no worker", "Owner, who is also a worker"]
+    SELLING = [
+        "the computer’s offered price Z is higher than the owner’s selected price P.",
+        "the computer’s offered price Z is lower than the owner’s selected price P.",
+        "the owner chooses to sell the company"
+    ]
+    TYPE = [
+        "whether the owner is also a worker or not",
+        "whether the owner can transfer the profit to him/herself by choosing the owner bonus",
+        "the task the worker must complete"
+    ]
 
 
 class Subsession(BaseSubsession):
@@ -21,49 +36,28 @@ class Group(BaseGroup):
     pass
 
 
+def make_control_models():
+    return models.BooleanField(blank=True)
+
+
 class Player(BasePlayer):
-    control_working = models.IntegerField(
-        label="The more sliders a worker solves, the higher…",
-        choices=[
-            [1, 'the profit'],
-            [2, "the worker's payoff"],
-            [3, "the owner’s payoff if s/he chooses the owner bonus in the profit choice after the same round"]
-        ],
-        widget=widgets.RadioSelect
-    )
+    control_working_profit = make_control_models()
+    control_working_worker_payoff = make_control_models()
+    control_working_owner_payoff = make_control_models()
 
-    control_profit_choice = models.IntegerField(
-        label="Assume the profit choice is the worker bonus. Who receives a share of the profit?",
-        choices=[
-            [1, "Worker"],
-            [2, "Owner, who is no worker"],
-            [3, "Owner, who is also a worker"]
-        ],
-        widget=widgets.RadioSelect
-    )
+    control_profit_choice_owner = make_control_models()
+    control_profit_choice_worker = make_control_models()
+    control_profit_choice_stewardowner = make_control_models()
 
-    control_selling_choice = models.IntegerField(
-        label="In the selling choice, the company is sold if …",
-        choices=[
-            [1, "the computer’s offered price Z is higher than the owner’s selected price P."],
-            [2, "the computer’s offered price Z is lower than the owner’s selected price P."],
-            [3, "the owner chooses to sell the company"]
-        ],
-        widget=widgets.RadioSelect
-    )
+    control_selling_choice_higher = make_control_models()
+    control_selling_choice_lower = make_control_models()
+    control_selling_choice_owner = make_control_models()
 
-    control_types = models.IntegerField(
-        label="The company types differ in ...",
-        choices=[
-            [1, "whether the owner is also a worker or not"],
-            [2, "whether the owner can transfer the profit to him/herself by choosing the owner bonus"],
-            [3, "the task the worker must complete"]
-        ],
-        widget=widgets.RadioSelect
-    )
+    control_types_owner = make_control_models()
+    control_types_decision = make_control_models()
+    control_types_task = make_control_models()
 
     company_ranking_owner = models.StringField()
-
     company_ranking_worker = models.StringField()
 
 
@@ -110,7 +104,7 @@ class SummaryTypes(Page):
 
 class ControlQuestions(Page):
     form_model = 'player'
-    form_fields = ['control_working', 'control_profit_choice', 'control_selling_choice', 'control_types']
+    form_fields = ['control_working_profit', 'control_working_worker_payoff', 'control_working_owner_payoff']
 
 
 class CompanyChoiceOwner(Page):
@@ -127,4 +121,4 @@ class Randomization(WaitPage):
     pass
 
 
-page_sequence = [CompanyChoiceOwner, CompanyChoiceWorker]
+page_sequence = [ControlQuestions]
