@@ -3,6 +3,7 @@ import json
 
 from otree import settings
 from otree.api import *
+from otree.models import participant
 
 from _static.TimePage import TimePage
 from .image_utils import encode_image
@@ -21,7 +22,7 @@ includes timeouts and dropout pages
 class Constants(BaseConstants):
     name_in_url = "production"
     players_per_group = 4
-    num_rounds = 2  # TODO set number from calibration
+    num_rounds = 4  # TODO set number from calibration
     instructions_template = __name__ + "/instructions.html"
 
 
@@ -466,7 +467,18 @@ class ChoiceWaitPage(WaitPage):
 
 
 class ResultsChoice(TimePage):
-    pass
+
+    @staticmethod
+    def make_previous_results(player: Player):
+        group = player.group
+        current_results = [player.round_number, group.tot_effort, group.profit, group.profit_choice, player.payoff]
+        player.participant.previous_results[player.round_number] = current_results
+        print(player.participant.previous_results)
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        TimePage.before_next_page(player, timeout_happened)
+        ResultsChoice.make_previous_results(player)
 
 
 class ResultCompany(Page):

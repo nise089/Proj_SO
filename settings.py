@@ -86,7 +86,7 @@ REAL_WORLD_CURRENCY_CODE = 'USD'
 USE_POINTS = True
 
 DEMO_PAGE_INTRO_HTML = ''
-PARTICIPANT_FIELDS = ['is_dropout', 'group_id', 'job', 'company_size', 'company_type']
+PARTICIPANT_FIELDS = ['is_dropout', 'group_id', 'job', 'company_size', 'company_type', 'previous_results']
 SESSION_FIELDS = ['params']
 ROOMS = []
 

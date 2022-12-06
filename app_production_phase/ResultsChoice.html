@@ -60,6 +60,35 @@
                 {{ endif }}
             {{ endif }}
         </div>
+        <div  class="card-text">
+            <table class="table">
+               <thead>
+               <tr>
+                   <th> Round </th>
+                   <th> Total sliders solved </th>
+                   <th> Profit </th>
+                   <th> Profit choice </th>
+                   <th> Your payoff </th>
+               </tr>
+               </thead>
+               <tbody>
+               {{ for round, results in player.participant.previous_results.items }}
+                 <tr>
+                       {{ for result in results }}
+                            <td> {{ result }}</td>
+                       {{ endfor }}
+                    </tr>
+               {{ endfor }}
+               <tr>
+                   <td>{{player.round_number}}</td>
+                   <td>{{group.tot_effort}}</td>
+                   <td>{{group.profit}}</td>
+                   <td>{{group.profit_choice}}</td>
+                   <td>{{player.payoff}}</td>
+               </tr>
+               </tbody>
+            </table>
+        </div>
     </div>
 </div>
 <div style="text-align:center;">

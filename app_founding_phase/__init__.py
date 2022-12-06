@@ -37,12 +37,13 @@ class GroupingWaitPage(WaitPage):
 
 class RoleWaitPage(WaitPage):
     @staticmethod
-    def assign_roles_and_company_type(group: Group):
+    def assign_participant_vars(group: Group):
         """ call set_group_id method and assign role (job) to each participant in the group """
         for player in group.get_players():
             RoleWaitPage.set_group_id(player)
             RoleWaitPage.assign_role(player)
             RoleWaitPage.assign_company_type(player)
+            RoleWaitPage.initialize_previous_results_dict(player)
 
     @staticmethod
     def set_group_id(player: Player):
@@ -69,10 +70,14 @@ class RoleWaitPage(WaitPage):
             print("company type is", player.participant.company_type)
 
     @staticmethod
+    def initialize_previous_results_dict(player: Player):
+        player.participant.previous_results = dict()
+
+    @staticmethod
     def is_displayed(player: Player):
         return player.round_number == 1
 
-    after_all_players_arrive = assign_roles_and_company_type
+    after_all_players_arrive = assign_participant_vars
 
 
 class Role(Page):
