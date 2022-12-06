@@ -12,16 +12,11 @@
 {# *** CONTENT *** #}
 {# ****************************************************************************************************************** #}
 {{ block content }}
-<div class="logo p-3">
-        <a href="https://www.uni-regensburg.de/index.html.en" target="_blank">
-            <img src="{% static 'img/Logo_UR.svg' %}" class="img-fluid" alt="University of Regensburg">
-        </a>
-    </div>
 <div class="card bg-light mb-3">
     <div class="card-body">
         <h5 class="text-center pb-3">Thank you for participating!</h5>
         <div class="card-text">
-          <p> In Part 2, you were [XX] in a [XXX].</p>
+          <p> In Part 2, you were XXX in company XXX.</p>
           <table class="table">
                 <tr>
                     <th> Participant fee </th>
@@ -30,8 +25,8 @@
                     <th> Donation </th>
                 </tr>
                 <tr>
-                  <td> participation_fee  </td>
-                  <td> player.payoff  </td>
+                  <td> {{participation_fee}}  </td>
+                  <td> {{player.payoff}}  </td>
                   <td> player.payment </td>
                   <td> player.donation </td>
                 </tr>

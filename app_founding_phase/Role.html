@@ -1,10 +1,69 @@
+{{ extends 'global/Page.html' }}
+
+
+{# ****************************************************************************************************************** #}
+{# *** TITLE *** #}
+{# ****************************************************************************************************************** #}
 {{ block title }}
-    Your role is {{ participant.job.value}}
+{{ blocktrans trimmed }} Your Role and Company {{ endblocktrans }}
 {{ endblock }}
 
+{# ****************************************************************************************************************** #}
+{# *** CONTENT *** #}
+{# ****************************************************************************************************************** #}
 {{ block content }}
+<div class="card bg-light mb-3">
+    <div class="card-body">
+        <h5 class="text-center pb-3"> Your role and company</h5>
+        <div class="card-text">
+            <p>
+               You are randomly assigned to the role {{ participant.job.value}} of XXX. <br>
+                In your company, there is one owner and three workers.
+            </p>
+            <p>
+               The three workers generate profit by completing the slider task. <br>
+                You make the decisions of the company.
+            </p>
 
-    {{ next_button }}
+            <table class="table table-sm center">
+                <thead>
+                <tr>
+                    <th class="text-center"> You decide </th>
+                    <th class="text-center"> You earn </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td class="text-left">
+                        <ul>
+                            <li> whether to found the company by lending your endowment </li>
+                        </ul>
+                        If you found the company
+                        <ul>
+                            <li> whether profits are paid to yourself as an owner bonus, to the workers as a worker
+                                bonus or are donated</li>
+                            <li> for which price you are willing to sell the company </li>
+                        </ul>
+                    </td>
+                    <td class="text-left">
+                    <ul>
+                        <li> the endowment of XXX </li>
+                    </ul>
+                    If you found the company
+                    <ul>
+                        <li> a dividend of XXX in each production round </li>
+                        <li> the profit of a round in which you choose the owner bonus </li>
+                        <li> the selling price if the company is sold </li>
+                    </ul>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+
+        </div>
+    </div>
+</div>
+<div style="text-align:center;">
+    <button class="otree-btn-next btn btn-primary next-button otree-next-button">Next</button>
+</div>
 {{ endblock }}
-
-

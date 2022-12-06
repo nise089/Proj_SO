@@ -1,18 +1,35 @@
+{{ extends 'global/Page.html' }}
+
+
+{# ****************************************************************************************************************** #}
+{# *** TITLE *** #}
+{# ****************************************************************************************************************** #}
 {{ block title }}
-    Page title
+{{ blocktrans trimmed }} Production Phase {{ endblocktrans }}
 {{ endblock }}
 
+{# ****************************************************************************************************************** #}
+{# *** CONTENT *** #}
+{# ****************************************************************************************************************** #}
 {{ block content }}
-The profit choice is {{ group.profit_choice }}.
-
-{{ if player.round_number > 1}}
-The accepted price was {{ group.accepted_price }} and the computer offered {{ group.price_offer }}.
-The company is sold is {{ group.sold }}.
-{{ endif }}
-The donations are {{ group.donation }}.
-Your payoff is {{ player.payoff }}.
-
-    {{ next_button }}
+<div class="card bg-light mb-3">
+    <div class="card-body">
+        <h5 class="text-center pb-3"> Round {{ player.round_number}} - Result </h5>
+        <div class="card-text">
+            The profit choice is {{ group.profit_choice }}.
+            {{ if player.round_number > 1}}
+                The accepted price was {{ group.accepted_price }} and the computer offered {{ group.price_offer }}.
+                The company is sold is {{ group.sold }}.
+            {{ endif }}
+            The donations are {{ group.donation }}.
+            Your payoff is {{ player.payoff }}.
+        </div>
+    </div>
+</div>
+<div style="text-align:center;">
+    <button class="otree-btn-next btn btn-primary next-button otree-next-button">Next</button>
+</div>
 {{ endblock }}
+
 
 

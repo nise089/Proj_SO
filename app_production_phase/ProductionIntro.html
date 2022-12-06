@@ -1,8 +1,26 @@
-{{ block title }}
-    Production Phase
-{{ endblock }}
-{{ block content }}
-You are now in the production phase blablba.
-    {{ next_button }}
+{{ extends 'global/Page.html' }}
 
+
+{# ****************************************************************************************************************** #}
+{# *** TITLE *** #}
+{# ****************************************************************************************************************** #}
+{{ block title }}
+{{ blocktrans trimmed }} Production Phase {{ endblocktrans }}
+{{ endblock }}
+
+{# ****************************************************************************************************************** #}
+{# *** CONTENT *** #}
+{# ****************************************************************************************************************** #}
+{{ block content }}
+<div class="card bg-light mb-3">
+    <div class="card-body">
+        <h5 class="text-center pb-3"> You now entered the production phase. </h5>
+        <div class="card-text">
+            You are now in the production phase blablba.
+        </div>
+    </div>
+</div>
+<div style="text-align:center;">
+    <button class="otree-btn-next btn btn-primary next-button otree-next-button">Next</button>
+</div>
 {{ endblock }}

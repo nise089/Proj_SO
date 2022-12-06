@@ -73,7 +73,9 @@ class Q2(Page):
 
 
 class Payment(Page):
-    pass
+
+    def vars_for_template(self):
+        return dict(participation_fee=self.session.config['participation_fee'])
 
 
 page_sequence = [Part3, Q1, Q2, Payment]

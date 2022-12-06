@@ -295,6 +295,7 @@ class GroupingWaitPage(WaitPage):
 class ProductionIntro(TimePage):
     timeout_seconds = 20
 
+    @staticmethod
     def is_displayed(player: Player):
         parent_condition = TimePage.is_displayed(player)
         return parent_condition and player.round_number == 1
@@ -303,6 +304,7 @@ class ProductionIntro(TimePage):
 class Round2(TimePage):
     timeout_seconds = 20
 
+    @staticmethod
     def is_displayed(player: Player):
         parent_condition = TimePage.is_displayed(player)
         return parent_condition and player.round_number == 2 and player.participant.job == JobsEnum.WORKER

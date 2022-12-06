@@ -97,10 +97,13 @@ class ResultsEnd(TimePage):
     timeout_seconds = 120
 
     @staticmethod
+    def is_displayed(player: Player):
+        parent_condition = TimePage.is_displayed(player)
+        return parent_condition and not player.group.founding
+
+    @staticmethod
     def app_after_this_page(player: Player, upcoming_apps):
-        print('upcoming_apps is', upcoming_apps)
-        if not player.group.founding:
-            return "app_feedback"
+        return "app_feedback"
 
 
 class Dropout(Page):
