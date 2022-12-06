@@ -292,6 +292,22 @@ class GroupingWaitPage(WaitPage):
         return player.round_number == 1
 
 
+class ProductionIntro(TimePage):
+    timeout_seconds = 20
+
+    def is_displayed(player: Player):
+        parent_condition = TimePage.is_displayed(player)
+        return parent_condition and player.round_number == 1
+
+
+class Round2(TimePage):
+    timeout_seconds = 20
+
+    def is_displayed(player: Player):
+        parent_condition = TimePage.is_displayed(player)
+        return parent_condition and player.round_number == 2 and player.participant.job == JobsEnum.WORKER
+
+
 class WorkingStage(TimePage):
     timeout_seconds = 20
 
@@ -462,5 +478,5 @@ class Dropout(Page):
     pass
 
 
-page_sequence = [GroupingWaitPage, WorkingStage, Game, WorkWaitPage, ProfitChoice, SellingChoice,
+page_sequence = [GroupingWaitPage, ProductionIntro, WorkingStage, Game, WorkWaitPage, ProfitChoice, SellingChoice,
                  ChoiceWaitPage, ResultsChoice, Dropout]
