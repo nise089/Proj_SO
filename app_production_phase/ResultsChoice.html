@@ -16,13 +16,49 @@
     <div class="card-body">
         <h5 class="text-center pb-3"> Round {{ player.round_number}} - Result </h5>
         <div class="card-text">
-            The profit choice is {{ group.profit_choice }}.
-            {{ if player.round_number > 1}}
-                The accepted price was {{ group.accepted_price }} and the computer offered {{ group.price_offer }}.
-                The company is sold is {{ group.sold }}.
+            <p>
+                <b> Profit choice </b> <br>
+                {{ if player.participant.job.value == "owner" }}
+                    You
+                {{ else }}
+                    The owner
+                {{ endif }}
+                chose to use the profit as{{ group.profit_choice }}. <br>
+                {{ if group.profit_choice == "owner bonus" }}
+                    The profit is transferred to the owners account as an owner bonus.
+                {{ elif group.profit_choice == "worker bonus" }}
+                    {{ if player.participant.job.value == "owner"}}
+                        The three
+                    {{ else }}
+                        You and the other
+                    {{ endif }}
+                    workers receive 1/3 {{group.profit}} as a worker bonus.
+                {{ else }}
+                    The profit is donated to XXX.
+                {{ endif }}
+            </p>
+
+            {{ if player.round_number > 1 }}
+                <b> Selling Choice </b>
+                {{ if player.participant.job.value == "owner" }}
+                    You have
+                {{ else }}
+                    The owner has
+                {{ endif }}
+                stated a price of {{ group.accepted_price}}. The computer's price offer is {{group.price_offer}}. <br>
+                Therefore, the company is
+                {{ if group.sold }}
+                    sold.
+                {{ else }}
+                    not sold.
+                    {{ if player.participant.job.value == "owner" }}
+                        You earn
+                    {{ else }}
+                        The owner earns
+                    {{ endif }}
+                    {{group.price_offer}}.
+                {{ endif }}
             {{ endif }}
-            The donations are {{ group.donation }}.
-            Your payoff is {{ player.payoff }}.
         </div>
     </div>
 </div>

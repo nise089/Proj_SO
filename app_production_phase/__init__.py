@@ -473,7 +473,8 @@ class ResultCompany(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        return player.round_number == Constants.num_rounds or player.group.sold
+        conditions = player.round_number == Constants.num_rounds or player.group.sold
+        return player.group.has_dropout is False and conditions
 
 
 class Dropout(Page):
