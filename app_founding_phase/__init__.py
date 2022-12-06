@@ -12,6 +12,7 @@ class C(BaseConstants):
     NAME_IN_URL = 'founding_phase'
     PLAYERS_PER_GROUP = 4
     NUM_ROUNDS = 1
+    ENDOWMENT = 10
 
 
 class Subsession(BaseSubsession):
@@ -87,6 +88,13 @@ class FoundingChoice(TimePage):
     def is_displayed(player: Player):
         parent_condition = TimePage.is_displayed(player)
         return parent_condition and player.participant.job == JobsEnum.OWNER
+
+    @staticmethod
+    def before_next_page(player: Player, timeout_happened):
+        TimePage.before_next_page(player, timeout_happened)
+        group = player.group
+        if group.founding is False:
+            player.payoff += C.ENDOWMENT
 
 
 class FoundingWaitPage(WaitPage):
