@@ -53,7 +53,9 @@ SESSION_CONFIGS = [
         name="Part2",
         display_name="Part2",
         num_demo_participants=16,
-        app_sequence=["app_welcome", "app_founding_phase", "app_founding_phase2", "app_production_phase"],
+        app_sequence=["app_welcome",
+                      "app_founding_phase", "app_production_phase", "app_feedback",
+                      "app_founding_phase2"],
     ),
 ]
 
