@@ -6,6 +6,7 @@ from otree.api import *
 
 from _static.TimePage import TimePage
 from .image_utils import encode_image
+from _static.Enums import CompanyTypesEnum, JobsEnum
 from . import task_sliders
 import random
 
@@ -297,7 +298,7 @@ class WorkingStage(TimePage):
     @staticmethod
     def is_displayed(player: Player):
         parent_condition = TimePage.is_displayed(player)
-        return parent_condition and player.participant.job == "worker"
+        return parent_condition and player.participant.job == JobsEnum.WORKER
 
 
 class Game(Page):
@@ -308,7 +309,7 @@ class Game(Page):
     @staticmethod
     def is_displayed(player: Player):
         parent_condition = TimePage.is_displayed(player)
-        return parent_condition and player.participant.job == "worker"
+        return parent_condition and player.participant.job == JobsEnum.WORKER
 
     @staticmethod
     def js_vars(player: Player):
@@ -359,7 +360,7 @@ class ProfitChoice(TimePage):
     @staticmethod
     def is_displayed(player: Player):
         parent_condition = TimePage.is_displayed(player)
-        return parent_condition and player.participant.job == "owner"
+        return parent_condition and player.participant.job == JobsEnum.OWNER
 
     @staticmethod
     def before_next_page(player: Player, timeout_happened):
@@ -378,7 +379,7 @@ class SellingChoice(TimePage):
     @staticmethod
     def is_displayed(player: Player):
         parent_condition = TimePage.is_displayed(player)
-        return parent_condition and player.participant.job == "owner" and player.round_number != 1
+        return parent_condition and player.participant.job == JobsEnum.OWNER and player.round_number != 1
 
 
 def company_sold(group: Group):
