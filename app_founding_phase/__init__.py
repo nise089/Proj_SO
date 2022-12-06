@@ -93,13 +93,12 @@ class FoundingWaitPage(WaitPage):
     pass
 
 
-class ResultsEnd(TimePage):
-    timeout_seconds = 120
+class ResultsEnd(Page):
 
     @staticmethod
     def is_displayed(player: Player):
-        parent_condition = TimePage.is_displayed(player)
-        return parent_condition and not player.group.founding
+        group = player.group
+        return group.has_dropout is False and not player.group.founding
 
     @staticmethod
     def app_after_this_page(player: Player, upcoming_apps):
