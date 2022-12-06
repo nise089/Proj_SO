@@ -1,0 +1,90 @@
+{{ extends 'global/Page.html' }}
+
+
+{# ****************************************************************************************************************** #}
+{# *** TITLE *** #}
+{# ****************************************************************************************************************** #}
+{{ block title }}
+{{ blocktrans trimmed }} Production Phase {{ endblocktrans }}
+{{ endblock }}
+
+{# ****************************************************************************************************************** #}
+{# *** CONTENT *** #}
+{# ****************************************************************************************************************** #}
+{{ block content }}
+<div class="card bg-light mb-3">
+    <div class="card-body">
+        <h5 class="text-center pb-3"> Company result </h5>
+        <div class="card-text">
+            <p>
+                {{ if group.sold }}
+                    Your company was sold.
+                {{ else }}
+                    You have reached the final round of your company's life cycle.
+                {{ endif }}
+            </p>
+            <p>
+                Here are your and your company's total results:
+            </p>
+
+            {{ if player.participant.job.value == "owner" }}
+            <table class="table">
+                <thead>
+                <tr>
+                    <th> Total sliders sloved </th>
+                    <th> Total owner bonus </th>
+                    <th> Total worker bonus </th>
+                    <th> Total donation </th>
+                    <th> Selling price </th>
+                    <th> Your payoff </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td> XXX  </td>
+                    <td> XXX  </td>
+                    <td> XXX </td>
+                    <td> XXX </td>
+                    <td> XXX </td>
+                  <td> {{player.payoff}} </td>
+                </tr>
+                </tbody>
+            </table>
+
+            {{ else }}
+            <table>
+                <thead>
+                <tr>
+                    <th> Total sliders sloved </th>
+                    <th> Total sliders you sloved </th>
+                    <th> Total owner bonus </th>
+                    <th> Total worker bonus </th>
+                    <th> Total donation </th>
+                    <th> Selling price </th>
+                    <th> Your payoff </th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td> XXX  </td>
+                    <td> XXX  </td>
+                    <td> XXX  </td>
+                    <td> XXX </td>
+                    <td> XXX </td>
+                    <td> XXX </td>
+                  <td> {{player.payoff}} </td>
+                </tr>
+                </tbody>
+            </table>
+            {{ endif }}
+
+        </div>
+    </div>
+</div>
+<div style="text-align:center;">
+    <button class="otree-btn-next btn btn-primary next-button otree-next-button">Next</button>
+</div>
+{{ endblock }}
+
+
+

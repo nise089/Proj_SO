@@ -10,8 +10,6 @@ from _static.Enums import CompanyTypesEnum, JobsEnum
 from . import task_sliders
 import random
 
-
-
 doc = """
 Production Phase with
 Slider task based on Github repository see code and documentation here: https://github.com/qwiglydee/otree-experiments
@@ -445,7 +443,7 @@ class ChoiceWaitPage(WaitPage):
                 # worker payoff
                 else:
                     p.payoff = settings.SESSION_CONFIG_DEFAULTS['wage'] \
-                            + p.num_correct * settings.SESSION_CONFIG_DEFAULTS['piecerate']
+                               + p.num_correct * settings.SESSION_CONFIG_DEFAULTS['piecerate']
         else:
             for p in group.get_players():
                 # investor payoff
@@ -460,7 +458,7 @@ class ChoiceWaitPage(WaitPage):
                 # worker payoff
                 else:
                     p.payoff = settings.SESSION_CONFIG_DEFAULTS['wage'] \
-                            + p.num_correct * settings.SESSION_CONFIG_DEFAULTS['piecerate']
+                               + p.num_correct * settings.SESSION_CONFIG_DEFAULTS['piecerate']
                     if profit_choice == 'worker bonus':
                         p.payoff += group.profit / 3
 
@@ -471,14 +469,22 @@ class ResultsChoice(TimePage):
     pass
 
 
+class ResultCompany(Page):
+
+    @staticmethod
+    def is_displayed(player: Player):
+        return player.round_number == Constants.num_rounds or player.group.sold
+
+
 class Dropout(Page):
 
     @staticmethod
     def is_displayed(player: Player):
         group = player.group
         return group.has_dropout
+
     pass
 
 
 page_sequence = [GroupingWaitPage, ProductionIntro, WorkingStage, Game, WorkWaitPage, ProfitChoice, SellingChoice,
-                 ChoiceWaitPage, ResultsChoice, Dropout]
+                 ChoiceWaitPage, ResultsChoice, ResultCompany, Dropout]
