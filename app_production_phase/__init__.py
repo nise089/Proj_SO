@@ -364,6 +364,8 @@ class WorkWaitPage(WaitPage):
         group.profit = revenue + settings.SESSION_CONFIG_DEFAULTS['Rfixed'] \
                        - settings.SESSION_CONFIG_DEFAULTS['n'] * settings.SESSION_CONFIG_DEFAULTS['wage'] \
                        - settings.SESSION_CONFIG_DEFAULTS['dividend']
+        if group.round_number == 1:
+            group.profit -= settings.SESSION_CONFIG_DEFAULTS['E']
 
     after_all_players_arrive = set_profit
 
@@ -419,49 +421,60 @@ class ChoiceWaitPage(WaitPage):
     # use own template
     template_name = 'app_production_phase/ChoiceWaitPage.html'
 
-    # for later sum up all payoffs across rounds
-    # if player.round_number == 1:
-    #     player.payoff = settings.SESSION_CONFIG_DEFAULTS['wage'] + puzzle.num_correct * \
-    #                     settings.SESSION_CONFIG_DEFAULTS['piecerate']
-    # else:
-    #     prev_player = player.in_round(player.round_number - 1)
-    #     prev_payoff = prev_player.payoff
-    #     player.payoff = prev_payoff + settings.SESSION_CONFIG_DEFAULTS['wage'] + puzzle.num_correct * \
-    #                     settings.SESSION_CONFIG_DEFAULTS['piecerate']
-
     @staticmethod
     def set_payoffs(group: Group):
-        # computer price offer and selling consequence
+        """" set cumulative payoff depending choices made """
         company_sold(group)
         profit_choice = group.field_maybe_none('profit_choice')
         # payoffs
-        if profit_choice is None:  # check if profit choice was made
-            # if not, also no selling choice must have been made
-            for p in group.get_players():
-                # investor payoff
-                if p.id_in_group == 1:
-                    p.payoff = settings.SESSION_CONFIG_DEFAULTS['dividend']
-                # worker payoff
-                else:
-                    p.payoff = settings.SESSION_CONFIG_DEFAULTS['wage'] \
-                               + p.num_correct * settings.SESSION_CONFIG_DEFAULTS['piecerate']
+        for player in group.get_players():
+            if player.round_number == 1:
+                previous_player_payoff = 0
+                if player.participant.job == JobsEnum.OWNER:
+                    player.payoff = settings.SESSION_CONFIG_DEFAULTS['E']
+            else:
+                previous_player_payoff = ChoiceWaitPage.get_players_previous_payoff(player)
+            if profit_choice is None:  # check if a decision was made (if no profit choice; no selling choice)
+                ChoiceWaitPage.set_payoff_if_no_decisions_are_made(player, previous_player_payoff)
+            else:
+                ChoiceWaitPage.set_profit_if_choices_were_made(group, player, previous_player_payoff, profit_choice)
+
+    @staticmethod
+    def set_profit_if_choices_were_made(group, player, previous_player_payoff, profit_choice):
+        """ set payoff depending on profit choice and selling price """
+        # investor payoff
+        if player.participant.job == JobsEnum.OWNER:
+            player.payoff += previous_player_payoff + settings.SESSION_CONFIG_DEFAULTS['dividend']
+            if profit_choice == 'owner bonus':
+                player.payoff += group.profit
+                if group.sold:
+                    player.payoff += group.price_offer
+            elif profit_choice != 'owner bonus' and group.sold:
+                player.payoff += group.price_offer
+        # worker payoff
         else:
-            for p in group.get_players():
-                # investor payoff
-                if p.id_in_group == 1:
-                    p.payoff = settings.SESSION_CONFIG_DEFAULTS['dividend']
-                    if profit_choice == 'owner bonus':
-                        p.payoff += group.profit
-                        if group.sold:
-                            p.payoff += group.price_offer
-                    elif profit_choice != 'owner bonus' and group.sold:
-                        p.payoff += group.price_offer
-                # worker payoff
-                else:
-                    p.payoff = settings.SESSION_CONFIG_DEFAULTS['wage'] \
-                               + p.num_correct * settings.SESSION_CONFIG_DEFAULTS['piecerate']
-                    if profit_choice == 'worker bonus':
-                        p.payoff += group.profit / 3
+            player.payoff = previous_player_payoff + settings.SESSION_CONFIG_DEFAULTS['wage'] \
+                             + player.num_correct * settings.SESSION_CONFIG_DEFAULTS['piecerate']
+            if profit_choice == 'worker bonus':
+                player.payoff += group.profit / 3
+
+    @staticmethod
+    def set_payoff_if_no_decisions_are_made(player, previous_player_payoff):
+        """ payoff without profit sharing or selling price """
+        # investor payoff
+        if player.participant.job == JobsEnum.OWNER:
+            player.payoff += previous_player_payoff + settings.SESSION_CONFIG_DEFAULTS['dividend']
+        # worker payoff
+        else:
+            player.payoff = previous_player_payoff + settings.SESSION_CONFIG_DEFAULTS['wage'] \
+                            + player.num_correct * settings.SESSION_CONFIG_DEFAULTS['piecerate']
+
+    @staticmethod
+    def get_players_previous_payoff(player):
+        """ get payoff of player in previous round and assign it to previous_player_payoff"""
+        previous_player = player.in_round(player.round_number - 1)
+        previous_player_payoff = previous_player.payoff
+        return previous_player_payoff
 
     after_all_players_arrive = set_payoffs
 
