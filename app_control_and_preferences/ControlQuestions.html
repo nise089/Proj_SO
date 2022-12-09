@@ -14,39 +14,69 @@
     </div>
     <div class="card-body">
         <h5 class="text-center pb-3"> Please select the correct answers </h5>
-        Tipp: More than one answer may be correct.
-        <br> The more sliders a worker solves, the higher…
-        <br>
-        {{ for field in C.MORE_SLIDERS }}
-            <label>
-            <input type="checkbox" name="{{ field }}" value="1">
-                {{ field }}
-            </label><br>
-        {{ endfor }}
-        <br> Assume the profit choice is the worker bonus. Who receives a share of the profit?
-        <br>
-        {{ for field in C.WORKER_BONUS }}
-            <label>
-            <input type="checkbox" name="{{ field }}" value="1">
-                {{ field }}
-            </label><br>
-        {{ endfor }}
-        <br> In the selling choice, the company is sold if …
-        <br>
-        {{ for field in C.SELLING }}
-            <label>
-            <input type="checkbox" name="{{ field }}" value="1">
-                {{ field }}
-            </label><br>
-        {{ endfor }}
-        <br> The company types differ in ...
-        <br>
-        {{ for field in C.TYPE }}
-            <label>
-            <input type="checkbox" name="{{ field }}" value="1">
-                {{ field }}
-            </label><br>
-        {{ endfor }}
+        <div class="text-center"> Hint: More than one answer may be correct.</div>
+        <div>
+            {{ for field in C.CONTROLS }}
+                {{ if field == 'profit' }}
+                <p> <b> The more sliders a worker solves, the higher… </b> <br>
+                    <input type="checkbox" name="{{ field }}" value="1">
+                        <label> the  profit </label> <br>
+                    {{ formfield_errors 'profit' }}
+                {{ elif field == "worker_payoff" }}
+                    <input type="checkbox" name="{{ field }}" value="1">
+                        <label> the  worker's payoff </label> <br>
+                    {{ formfield_errors 'worker_payoff'}}
+                {{ elif field == 'owner_payoff' }}
+                     <input type="checkbox" name="{{ field }}" value="1">
+                        <label> the  owner's payoff if s/he chooses the
+                            owner bonus in the profit choice after the same round</label> <br>
+                     {{ formfield_errors 'owner_payoff'}}
+                    </p>
+                {{ elif field == 'profit_choice_worker'}}
+                    <p> <b> Assume the profit choice is the worker bonus. Who receives a share of the profit? </b><br>
+                    <input type="checkbox" name="{{ field }}" value="1">
+                        <label> Each worker </label> <br>
+                    {{ formfield_errors 'profit_choice_worker' }}
+                {{ elif field == "profit_choice_owner" }}
+                    <input type="checkbox" name="{{ field }}" value="1">
+                        <label> The owner, who is no worker </label> <br>
+                    {{ formfield_errors 'profit_choice_owner'}}
+                {{ elif field == "profit_choice_stewardowner" }}
+                    <input type="checkbox" name="{{ field }}" value="1">
+                        <label> The owner, who is also a worker </label> <br>
+                    {{ formfield_errors 'profit_choice_stewardowner'}}
+                    </p>
+                {{ elif field == 'selling_choice_higher'}}
+                    <p> <b> In the selling choice, the company is sold if … </b> <br>
+                    <input type="checkbox" name="{{ field }}" value="1">
+                        <label> the computer’s offered price Z is higher than the owner’s selected price P. </label> <br>
+                    {{ formfield_errors 'selling_choice_higher' }}
+                {{ elif field == "selling_choice_lower" }}
+                    <input type="checkbox" name="{{ field }}" value="1">
+                        <label> the computer’s offered price Z is lower than the owner’s selected price P. </label> <br>
+                    {{ formfield_errors 'selling_choice_lower'}}
+                {{ elif  field == "selling_choice_owner"}}
+                     <input type="checkbox" name="{{ field }}" value="1">
+                        <label> the owner chooses to sell the company. </label> <br>
+                     {{ formfield_errors 'selling_choice_owner'}}
+                    </p>
+                {{ elif field == 'types_owner'}}
+                    <p> <b> The company types differ in ...</b> <br>
+                    <input type="checkbox" name="{{ field }}" value="1">
+                        <label> whether the owner is also a worker or not. </label> <br>
+                    {{ formfield_errors 'types_owner' }}
+                {{ elif field == "types_decision" }}
+                    <input type="checkbox" name="{{ field }}" value="1">
+                        <label> whether the owner can transfer the profit to him/herself by choosing
+                            the owner bonus. </label> <br>
+                    {{ formfield_errors 'types_decision'}}
+                {{ elif  field == "types_task"}}
+                    <input type="checkbox" name="{{ field }}" value="1">
+                        <label> the task the worker must complete. </label> <br>
+                    {{ formfield_errors 'types_task'}}
+                {{ endif }}
+            {{ endfor }}
+        </div>
     </div>
 </div>
 <div style="text-align:center;">
