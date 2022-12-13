@@ -70,11 +70,12 @@ SESSION_CONFIG_DEFAULTS = dict(
     wage=5,  # TODO set number from calibration
     piecerate=1,  # TODO set number from calibration
     productivity=2,  # TODO set number from calibration
-    prod_piecerate=1,  # TODO find way to dynamically change == productivity - piecerate
-    E=10,  # TODO set number from calibration
-    Rfixed=10,  # TODO set number from calibration
+    E=20,  # TODO set number from calibration
+    Rfixed=40,  # TODO set number from calibration
     n=3,
-    dividend=4,  # TODO set number from calibration
+    dividend=5,  # TODO set number from calibration
+    rounds=5,
+    max_slidertime=2
 )
 
 # ISO-639 code

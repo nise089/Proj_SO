@@ -22,26 +22,29 @@
                 <div class="col-12 col-md-8">
                     <p>
                         In this stage, the <b>workers</b> perform a <b>slider task</b>.
-                        <br>The task is to solve <b>as many sliders as possible</b> within XXX minutes.
+                        <br>The task is to solve <b>as many sliders as possible</b> within {{C.SLIDERTIME}} minutes.
                         <br>The total number of sliders solved determines the company’s <b>revenue</b>.
                         <br>In detail, the company’s revenue is determined by the total number of sliders multiplied
-                        by the company’s productivity level of XXX plus a fixed revenue of XXX:
+                        by the company’s productivity level of {{C.FIXED_REVENUE}} plus a fixed revenue of
+                        {{C.FIXED_REVENUE}} points:
                     </p>
-                    <p style="text-align:center"> 𝑅𝑒𝑣𝑒𝑛𝑢𝑒 = XXX + XXX * 𝑡𝑜𝑡𝑎𝑙 𝑛𝑢𝑚𝑏𝑒𝑟 𝑜𝑓 𝑠𝑙𝑖𝑑𝑒𝑟𝑠 </p>
+                    <p style="text-align:center"> 𝑅𝑒𝑣𝑒𝑛𝑢𝑒 = {{C.PRODUCTIVITY}} * 𝑡𝑜𝑡𝑎𝑙 𝑛𝑢𝑚𝑏𝑒𝑟 𝑜𝑓 𝑠𝑙𝑖𝑑𝑒𝑟𝑠 + {{C.FIXED_REVENUE}} </p>
                 </div>
             </div>
             <p>
-                <b>The three workers</b> receive a <b>fixed wage of XXXX</b> for completing the task and a
-                <b>piece-rate wage of XXX</b> for every correctly solved slider. In addition, the <b>owner</b> receives a
-                <b>fixed dividend of XXX</b>.
+                <b>The three workers</b> receive a <b>fixed wage of {{C.WAGE}} points</b> for completing the task and a
+                <b>piece-rate wage of {{C.PIECERATE}} points</b> for every correctly solved slider. In addition, the
+                <b>owner</b> receives a <b>fixed dividend of {{C.DIVIDEND}} points</b>.
             </p>
             <p style="text-align:center">
                 Thus, the <b>company’s costs</b> are
-                <br> 𝐶𝑜𝑠𝑡= XXX∗XXX+XXX∗𝑡𝑜𝑡𝑎𝑙 𝑛𝑢𝑚𝑏𝑒𝑟 𝑜𝑓 𝑠𝑙𝑖𝑑𝑒𝑟𝑠=XXX+𝑡𝑜𝑡𝑎𝑙 𝑛𝑢𝑚𝑏𝑒𝑟 𝑜𝑓 𝑠𝑙𝑖𝑑𝑒𝑟𝑠
+                <br> 𝐶𝑜𝑠𝑡s= {{C.PIECERATE}}∗𝑡𝑜𝑡𝑎𝑙 𝑛𝑢𝑚𝑏𝑒𝑟 𝑜𝑓 𝑠𝑙𝑖𝑑𝑒𝑟𝑠 + {{C.DIVIDEND}}+{{C.N}}∗{{C.WAGE}} =
+                {{cost_factor}}+{{C.PIECERATE}}*𝑡𝑜𝑡𝑎𝑙 𝑛𝑢𝑚𝑏𝑒𝑟 𝑜𝑓 𝑠𝑙𝑖𝑑𝑒𝑟𝑠
             </p>
             <div style="text-align:center; border-width:3px; border-style:solid; border-color:blue; padding: 1em;">
                 <p>The <b>company’s profit</b> is determined by the revenue minus the costs.
-                <br> P𝑟𝑜𝑓𝑖𝑡=XXX −xx+(xx-XX)∗𝑡𝑜𝑡𝑎𝑙 𝑛𝑢𝑚𝑏𝑒𝑟 𝑜𝑓 𝑠𝑙𝑖𝑑𝑒𝑟𝑠=XXX+𝑡𝑜𝑡𝑎𝑙 𝑛𝑢𝑚𝑏𝑒𝑟 𝑜𝑓 𝑠𝑙𝑖𝑑𝑒𝑟𝑠 </p>
+                <br> P𝑟𝑜𝑓𝑖𝑡=({{C.PRODUCTIVITY}}-{{C.PIECERATE}})∗𝑡𝑜𝑡𝑎𝑙 𝑛𝑢𝑚𝑏𝑒𝑟 𝑜𝑓 𝑠𝑙𝑖𝑑𝑒𝑟𝑠 +({{C.FIXED_REVENUE}}−{{cost_factor}})=
+                    {{profit_factor}}*𝑡𝑜𝑡𝑎𝑙 𝑛𝑢𝑚𝑏𝑒𝑟 𝑜𝑓 𝑠𝑙𝑖𝑑𝑒𝑟𝑠 +{{profit_fixed}} </p>
                 <p> <b>In short: The higher the number of solved sliders, the higher the profit.</b></p>
             </div>
             <p>
@@ -49,7 +52,8 @@
                 solve zero sliders. Therefore, the endowment is always paid back.
             </p>
             <p><b>In the first round</b>, the owner’s loan is repaid such that there the profit is<p>
-            <p style="text-align:center"> P𝑟𝑜𝑓𝑖𝑡=total number of sliders+XXX-XXX=total number of sliders </p>
+            <p style="text-align:center"> P𝑟𝑜𝑓𝑖𝑡={{profit_factor}}*total number of sliders+{{profit_fixed}}-{{C.ENDOWMENT}}
+            ={{profit_factor}}*𝑡𝑜𝑡𝑎𝑙 𝑛𝑢𝑚𝑏𝑒𝑟 𝑜𝑓 𝑠𝑙𝑖𝑑𝑒𝑟𝑠 </p>
         </div>
     </div>
 </div>

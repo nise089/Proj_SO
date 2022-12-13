@@ -1,3 +1,4 @@
+from otree import settings
 from otree.api import *
 
 from _static.Enums import CompanyTypesEnum, JobsEnum
@@ -12,7 +13,7 @@ class C(BaseConstants):
     NAME_IN_URL = 'founding_phase'
     PLAYERS_PER_GROUP = 4
     NUM_ROUNDS = 1
-    ENDOWMENT = 10
+    ENDOWMENT = settings.SESSION_CONFIG_DEFAULTS['E']
 
 
 class Subsession(BaseSubsession):
