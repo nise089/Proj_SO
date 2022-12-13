@@ -1,4 +1,5 @@
 from otree.api import *
+import settings
 
 doc = """
 Your app description
@@ -9,6 +10,7 @@ class C(BaseConstants):
     NAME_IN_URL = 'app_instructions'
     PLAYERS_PER_GROUP = None
     NUM_ROUNDS = 1
+    FEE = settings.SESSION_CONFIG_DEFAULT
 
 
 class Subsession(BaseSubsession):
@@ -64,4 +66,7 @@ class SummaryTypes(Page):
     pass
 
 
-page_sequence = []
+page_sequence = [
+    Part2, LifeCycle, Work, ProfitChoice, SellingChoice, SummaryProduction, Types, OwnersRole, DecisionSpace,
+    SummaryTypes
+]

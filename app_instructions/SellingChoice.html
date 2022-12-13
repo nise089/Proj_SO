@@ -14,7 +14,36 @@
     </div>
     <div class="card-body">
         <h5 class="text-center pb-3"> The selling choice stage </h5>
-
+        <div class="card-text">
+            <div class="row">
+                <div class="col-10 col-md-5">
+                    <img src="{{ static 'img/selling_choice_general.png'}}" alt="Selling Choice">
+                </div>
+                <div class="col-10 col-md-7">
+                    <p>
+                        The <b>owner selects a price P</b> between 0 and 100 for which s/he is willing to sell the
+                        company.
+                    </p>
+                    <p>Simultaneously, a <b>computer randomly draws a price offer Z</b> from the same range.</p>
+                    <ul>
+                        <li>
+                            If the owner’s price is smaller or equal to the computer’s price (<b>P < Z</b>),
+                            <b>the company is sold</b>, and the experiment ends. The <b>owner earns</b> the offered
+                            price <b>Z</b>.
+                        </li>
+                        <li>
+                            If the owner’s price is higher than the computer’s price (<b>P > Z</b>),
+                            <b>the company is not sold</b>, and the <b>production continues</b> with the
+                            <b>next round</b>.
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <p>
+                <b>Caution! The selling choice is only available starting from round 2. In round 1, the company cannot
+                be sold. </b>
+            </p>
+        </div>
     </div>
 </div>
 <div style="text-align:center;">
