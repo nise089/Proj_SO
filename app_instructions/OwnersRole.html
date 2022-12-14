@@ -1,3 +1,5 @@
+{{ extends "global/Page.html" }}
+
 {# *** TITLE *** #}
 {# ****************************************************************************************************************** #}
 {% block title %}
@@ -16,15 +18,22 @@
         <h5 class="text-center pb-3"> The owner's role </h5>
         <div class="card-text">
             <div class="row">
-                <div class="col-10 col-md-6">
+                <div class="col-10 col-md-6" style="text-align:center;">
                     <img src="{{ static 'img/roles_companyAB.png'}}" alt="Roles in Company A and B">
+                </div>
+                <div class="col-10 col-md-6 flex-container__vertical-center" style="flex-direction: row-reverse">
+                    <img src="{{ static 'img/roles_companyCD.png'}}" alt="Roles in Company C and D"
+                         style="width: 362px; height: auto; object-fit:contain;">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-10 col-md-6 ">
                     <ul>
                         <li>The owner is one <b>randomly selected participant</b>.</li>
                         <li>The company consists of <b>one owner and three workers</b>.</li>
                     </ul>
                 </div>
-                <div class="col-10 col-md-6">
-                    <img src="{{ static 'img/roles_companyCD.png'}}" alt="Roles in Company C and D">
+                <div class="col-10 col-md-6 flex-container__vertical-center pb-3">
                     <ul>
                         <li>The owner is a <b>worker her/himself</b>.</li>
                         <li>

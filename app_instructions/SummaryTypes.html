@@ -1,3 +1,5 @@
+{{ extends "global/Page.html" }}
+
 {# *** TITLE *** #}
 {# ****************************************************************************************************************** #}
 {% block title %}
@@ -55,20 +57,25 @@
             </table>
             <p class="text-center">... their flow in the production phase</p>
             <div class="row">
+                <div class="col-10 col-md-6"> <b>Company A</b> </div>
+                <div class="col-10 col-md-6"> <b>Company B</b>  </div>
                 <div class="col-10 col-md-6">
-                    <b>Company A</b>
                     <img src="{{ static 'img/productionA.png'}}" alt="Selling Choice">
-                    <b>Company C</b>
-                    <img src="{{ static 'img/productionC.png'}}" alt="Selling Choice">
                 </div>
-                <div class="col-10 col-md-6">
-                    <b>Company B</b>
+                <div class="col-10 col-md-6 flex-container__vertical-center">
                    <img src="{{ static 'img/productionB.png'}}" alt="Selling Choice">
-                    <b>Company D</b>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-10 col-md-6"> <b>Company C</b> </div>
+                <div class="col-10 col-md-6"> <b>Company D</b>  </div>
+                <div class="col-10 col-md-6">
+                   <img src="{{ static 'img/productionC.png'}}" alt="Selling Choice">
+                </div>
+                <div class="col-10 col-md-6 flex-container__vertical-center">
                     <img src="{{ static 'img/productionD.png'}}" alt="Selling Choice">
                 </div>
             </div>
-
         </div>
     </div>
 </div>

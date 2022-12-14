@@ -1,8 +1,10 @@
+{% extends "otree/Page.html" %}
+{% load otree static %}
 
-{{ extends "otree/Page.html" }}
+{% block global_styles  %}
+<link href="{% static 'global/style.css' %}" rel="stylesheet">
+{% endblock %}
 
-{{ block global_styles  }}
-    <style>
-    
-    </style>
-{{ endblock }}
+{% block global_scripts  %}
+<script type="text/javascript" src="{% static 'global/script.js' %}"></script>
+{% endblock %}

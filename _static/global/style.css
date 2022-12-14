@@ -1,0 +1,64 @@
+.centered-form-table label {
+    display: block;
+    color: transparent
+}
+
+.centered-form-table label > input {
+    margin-left: 0;
+}
+
+.slidertd {
+	width: 100%;
+	display: none;
+}
+.slider-before {
+	display: block;
+	height: 10px;
+	width: 100%;
+	background: #1e5bff;
+}
+
+.slider-container {
+    display: flex;
+    align-items: center;
+}
+
+.slider-description-start {
+    text-align: right;
+    display: flex;
+    justify-content: flex-end; /* align horizontal */
+    align-items: center;
+}
+
+.slider-description-end {
+    text-align: left;
+    display: flex;
+    justify-content: flex-start; /* align horizontal */
+    align-items: center;
+}
+
+.error-message {
+    display: none;
+}
+
+.flex-grow-1 {
+    flex-grow: 1;
+}
+
+.auto-height {
+    height: auto;
+}
+
+.auto-height__padding {
+    padding: 0.2rem;
+}
+
+.flex-container__vertical-center {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.flex-container__vertical-center > ul {
+    margin-bottom: 0;
+}
