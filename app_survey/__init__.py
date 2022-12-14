@@ -388,11 +388,13 @@ class Player(BasePlayer):
         label='Please state how much of this hypothetical $10 endowment you would share with the other imaginary person.',
         min=0, max=10,
     )
+    check_DG_hypo = models.IntegerField()
 
     reciprocity_neg = models.IntegerField(
         label='How willing are you to punish someone who treats you unfairly, even if there may be costs for you?',
         min=0, max=10,
     )
+    check_reciprocity_neg = models.IntegerField()
 
     donated = make_choice('How often do you donate money to a charitable organization?')
 
@@ -411,7 +413,7 @@ class Demographics(Page):
 
 class DG(Page):
     form_model = 'player'
-    form_fields = ['DG_hypo', 'reciprocity_neg']
+    form_fields = ['DG_hypo', 'reciprocity_neg', 'check_DG_hypo', 'check_reciprocity_neg']
 
 
 class Donation(Page):

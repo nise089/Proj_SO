@@ -1,4 +1,6 @@
 {{ extends 'global/Page.html' }}
+{{ load otree static }}
+{{ load i18n }}
 
 
 {# ****************************************************************************************************************** #}
@@ -12,25 +14,64 @@
 {# *** CONTENT *** #}
 {# ****************************************************************************************************************** #}
 {{ block content }}
-<div class="logo p-3">
-        <a href="https://www.uni-regensburg.de/index.html.en" target="_blank">
-            <img src="{% static 'img/Logo_UR.svg' %}" class="img-fluid" alt="University of Regensburg">
-        </a>
-    </div>
 <div class="card bg-light mb-3">
     <div class="card-body">
         <h5 class="text-center pb-3"> Please indicate your answer by moving the sliders</h5>
         <div class="card-text">
+            <p>Click the blue bars to reveal the sliders.</p>
+        <div class="pb-4">
+            <b>Imagine yourself in a situation where you are given $10, which you can keep to yourself or give to
+                another person, all or any portion of it.</b>
             <p>
-                Imagine yourself in a situation where you are given $10, which you can keep to yourself or give to
-                another person, all or any portion of it.
-                {{ formfield 'DG_hypo' }}
+                {{ form.DG_hypo.label }}
             </p>
+            <div class="row">
+                <div class="col-2 slider-description-start">0</div>
+                <div class="col-5 slider-container">
+                    <div id="DG_hyp_before"
+                         class="slider-before"
+                         onclick="showSlider(event)">
+                    </div>
+                    <input type="range" name="DG_hypo" id="DG_hypo"
+                           class="slidertd"
+                           min="0"
+                           max="10"
+                           onchange="setControlFieldValue(event)"/>
+                    <input type="hidden" name="check_DG_hypo" value="" class="slider-check">
+                </div>
+                <div class="col-5 slider-description-end">10</div>
+            </div>
+            <div class="error-message form-control-errors">
+                Please click the blue bar to reveal the slider.
+            </div>
+        </div>
+
+        <div class="pb-4">
+            <b>Please indicate how willing you are to behave in the following way.</b>
             <p>
-                Please indicate how willing you are to behave in the following way.
-                {{ formfield 'reciprocity_neg'}}
+                {{ form.reciprocity_neg.label}}
             </p>
-            <!--  TODO make sliders for both fields-->
+            <div class="row">
+                <div class="col-2 slider-description-start">completely unwilling to do so</div>
+                <div class="col-5 slider-container">
+                    <div id="reciprocity_before"
+                         class="slider-before"
+                         onclick="showSlider(event)">
+                    </div>
+                    <input type="range" name="reciprocity_neg" id="reciprocity_neg"
+                           class="slidertd"
+                           min="0"
+                           max="10"
+                           onchange="setControlFieldValue(event)"/>
+                    <input type="hidden" name="check_reciprocity_neg" value="" class="slider-check">
+                </div>
+                <div class="col-5 slider-description-end">very willing to do so</div>
+            </div>
+            <div class="error-message form-control-errors">
+                Please click the blue bar to reveal the slider.
+            </div>
+        </div>
+
         </div>
     </div>
 </div>
